@@ -10,7 +10,7 @@ public class OfficeCreatedEvent : Event
 {
     public OfficeCreatedEvent(Guid id, string name)
     {
-        Id = id;
+        AggregateId = id;
         Name = name;
     }
 

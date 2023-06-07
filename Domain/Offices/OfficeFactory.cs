@@ -8,7 +8,7 @@ public class OfficeFactory : IOfficeFactory
 {
     public Office Create(Guid officeId, string name)
     {
-        return new Office(officeId, name);
+        return Office.Create(officeId, name);
     }
 
     public Office? Rehydrate(IEnumerable<Event> events)
@@ -20,15 +20,15 @@ public class OfficeFactory : IOfficeFactory
             switch (@event)
             {
                 case OfficeCreatedEvent officeCreated:
-                    office = Create(officeCreated.Id, officeCreated.Name);
+                    office = new Office(officeCreated.AggregateId) { Name = officeCreated.Name };
                     break;
 
                 case DoorAddedEvent doorAdded:
-                    office?.Apply(doorAdded);
+                    office?.ApplyEvent(doorAdded);
                     break;
 
                 case DoorLockedEvent doorLocked:
-                    office?.Apply(doorLocked);
+                    office?.ApplyEvent(doorLocked);
                     break;
 
                 // handle other event types...

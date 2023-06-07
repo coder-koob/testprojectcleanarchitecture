@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace Domain.Common;
 
 public abstract class Aggregate
@@ -11,8 +6,11 @@ public abstract class Aggregate
 
     public Guid Id { get; set; }
 
-    public virtual void Apply(Event @event)
+    public abstract void ApplyEvent(Event @event);
+    
+    protected void ApplyChange(Event @event)
     {
+        ApplyEvent(@event);
         _changes.Add(@event);
     }
 

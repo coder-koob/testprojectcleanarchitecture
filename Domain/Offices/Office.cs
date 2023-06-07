@@ -12,14 +12,24 @@ public class Office : Aggregate
     public string? Name;
     public IReadOnlyCollection<Door> Doors => _doors.AsReadOnly();
 
-    public Office(Guid id, string name)
+    internal Office(Guid id)
     {
         Id = id;
-        Name = name;
-        Apply(new OfficeCreatedEvent(id, name));
     }
 
-    public override void Apply(Event @event)
+    public static Office Create(Guid id, string name)
+    {
+        var office = new Office(id)
+        {
+            Name = name
+        };
+
+        office.ApplyChange(new OfficeCreatedEvent(id, name));
+
+        return office;
+    }
+
+    public override void ApplyEvent(Event @event)
     {
         switch (@event)
         {
@@ -28,20 +38,18 @@ public class Office : Aggregate
                 break;
                 
             case DoorAddedEvent doorAdded:
-                var door = new Door(doorAdded.Id);
+                var door = new Door(doorAdded.DoorId);
                 _doors.Add(door);
                 break;
 
             case DoorLockedEvent doorLocked:
-                var doorToLock = _doors.First(d => d.Id == doorLocked.Id);
+                var doorToLock = _doors.First(d => d.Id == doorLocked.DoorId);
                 doorToLock.Lock();
                 break;
 
             default:
                 throw new Exception($"Unhandled event type: {@event.GetType().FullName}");
         }
-
-        base.Apply(@event);
     }
 
     public void AddDoor(Guid doorId)
@@ -51,8 +59,9 @@ public class Office : Aggregate
             throw new Exception($"Door with id {doorId} already exists in the office.");
         }
 
-        var door = new Door(doorId);
-        _doors.Add(door);
+        // Create a DoorAddedEvent and apply it.
+        var doorAddedEvent = new DoorAddedEvent(Id, doorId);
+        ApplyChange(doorAddedEvent);
     }
 
     public void LockDoor(Guid doorId)

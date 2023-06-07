@@ -1,6 +1,6 @@
 namespace Domain.Common;
 
-public abstract class Event
+public class Event
 {
     public Guid Id { get; set; }
     public Guid AggregateId { get; set; }
