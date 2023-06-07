@@ -7,12 +7,12 @@ namespace Domain.Doors;
 
 public class Door
 {
-    public string Id { get; private set; }
+    public string DoorId { get; private set; }
     public bool IsLocked { get; private set; }
 
-    public Door(string id)
+    public Door(string doorId)
     {
-        Id = id;
+        DoorId = doorId;
         IsLocked = false;
     }
 

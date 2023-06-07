@@ -1,36 +1,38 @@
 using Domain.Common;
-using Domain.Doors.Events;
 using Domain.Interfaces;
 using Domain.Offices;
 using MediatR;
 
 namespace Domain.Doors.Commands;
 
-public record LockDoorPayload(string OfficeId, string DoorId);
 
-public class LockDoorCommand : Command<LockDoorPayload>
+public record AddDoorPayload(string OfficeId, string DoorId);
+
+public class AddDoorCommand : Command<AddDoorPayload>
 {
-    public LockDoorCommand(LockDoorPayload payload)
-        : base("LockDoor", payload)
+    public AddDoorCommand(AddDoorPayload payload)
+        : base("AddDoor", payload)
     {
     }
 }
 
-public class LockDoorCommandHandler : IRequestHandler<LockDoorCommand>
+public class AddDoorCommandHandler : IRequestHandler<AddDoorCommand>
 {
     private readonly IEventStore _eventStore;
     private readonly IOfficeFactory _officeFactory;
 
-    public LockDoorCommandHandler(IEventStore eventStore, IOfficeFactory officeFactory)
+    public AddDoorCommandHandler(IEventStore eventStore, IOfficeFactory officeFactory)
     {
         _eventStore = eventStore;
         _officeFactory = officeFactory;
     }
 
-    public async Task Handle(LockDoorCommand command, CancellationToken cancellationToken)
+    public async Task Handle(AddDoorCommand command, CancellationToken cancellationToken)
     {
         var officeEvents = await _eventStore.GetEvents(command.Payload.OfficeId);
         var office = _officeFactory.Rehydrate(officeEvents);
+
+        office?.AddDoor(command.Payload.DoorId);
 
         if (office is not null)
         {

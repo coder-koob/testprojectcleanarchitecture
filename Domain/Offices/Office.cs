@@ -1,35 +1,64 @@
+using Domain.Common;
 using Domain.Doors;
+using Domain.Doors.Events;
 
 namespace Domain.Offices;
 
 public class Office
 {
-    public string Id { get; private set; }
-    public List<Door> Doors { get; private set; }
+    private readonly List<Door> _doors = new();
+    private readonly List<Event> _changes = new();
 
-    public Office(string id, List<Door> doors)
+    public string OfficeId { get; private set; }
+    public IReadOnlyCollection<Door> Doors => _doors.AsReadOnly();
+
+    public Office(string officeId)
     {
-        Id = id;
-        Doors = doors;
+        OfficeId = officeId;
+    }
+
+    public void AddDoor(string doorId)
+    {
+        if (_doors.Any(d => d.DoorId == doorId))
+        {
+            throw new Exception($"Door with id {doorId} already exists in the office.");
+        }
+
+        var door = new Door(doorId);
+        _doors.Add(door);
+
+        var @event = new DoorAddedEvent(OfficeId, doorId);
+        _changes.Add(@event);
     }
 
     public void LockDoor(string doorId)
     {
-        var door = Doors.Find(d => d.Id == doorId);
-        if (door != null && !door.IsLocked)
+        var door = _doors.FirstOrDefault(d => d.DoorId == doorId);
+
+        if (door == null)
         {
-            door.Lock();
-            // raise DoorLocked event
+            throw new Exception($"Door with id {doorId} does not exist in the office.");
         }
+
+        if (door.IsLocked)
+        {
+            throw new Exception($"Door with id {doorId} is already locked.");
+        }
+
+        door.Lock();
+
+        var @event = new DoorLockedEvent(OfficeId, doorId);
+        _changes.Add(@event);
     }
 
-    public void UnlockDoor(string doorId)
+    public IEnumerable<Event> GetChanges()
     {
-        var door = Doors.Find(d => d.Id == doorId);
-        if (door != null && door.IsLocked)
-        {
-            door.Unlock();
-            // raise DoorUnlocked event
-        }
+        return _changes.AsReadOnly();
+    }
+
+    public void ClearChanges()
+    {
+        _changes.Clear();
     }
 }
+

@@ -1,9 +1,8 @@
 using Domain.Common;
 using Domain.Interfaces;
+using Infrastructure.Persistence;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
-
-namespace Infrastructure.Persistence;
 
 public class MongoDbEventStore : IEventStore
 {
@@ -16,15 +15,14 @@ public class MongoDbEventStore : IEventStore
         _events = database.GetCollection<Event>("events");
     }
 
-    public async Task<IEnumerable<Event>> GetEventsForAggregate(Guid aggregateId)
+    public async Task SaveEvent(string aggregateId, Event @event)
     {
-        return await _events.Find(e => e.AggregateId == aggregateId)
-            .SortBy(e => e.Version)
-            .ToListAsync();
+        await _events.InsertOneAsync(@event);
     }
 
-    public async Task SaveEventsForAggregate(Guid aggregateId, IEnumerable<Event> events)
+    public async Task<IEnumerable<Event>> GetEvents(string aggregateId)
     {
-        await _events.InsertManyAsync(events);
+        var filter = Builders<Event>.Filter.Eq(e => e.AggregateId, aggregateId);
+        return await _events.Find(filter).ToListAsync();
     }
 }

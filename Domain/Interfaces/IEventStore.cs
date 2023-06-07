@@ -4,6 +4,6 @@ namespace Domain.Interfaces;
 
 public interface IEventStore
 {
-    Task<IEnumerable<Event>> GetEventsForAggregate(Guid aggregateId);
-    Task SaveEventsForAggregate(Guid aggregateId, IEnumerable<Event> events);
+    Task SaveEvent(string aggregateId, Event @event);
+    Task<IEnumerable<Event>> GetEvents(string aggregateId);
 }
