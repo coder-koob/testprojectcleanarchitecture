@@ -4,7 +4,17 @@ public abstract class Aggregate
 {
     protected readonly List<Event> _changes = new();
 
-    public Guid Id { get; set; }
+    public Guid Id { get; protected set; }
+
+    public static T Rehydrate<T>(IEnumerable<Event> events) where T : Aggregate, new()
+    {
+        var instance = new T();
+        foreach (var @event in events)
+        {
+            instance.ApplyEvent(@event);
+        }
+        return instance;
+    }
 
     public abstract void ApplyEvent(Event @event);
     
@@ -24,3 +34,4 @@ public abstract class Aggregate
         _changes.Clear();
     }
 }
+

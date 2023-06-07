@@ -17,30 +17,21 @@ public class AddDoorCommand : Command<AddDoorPayload>
 
 public class AddDoorCommandHandler : IRequestHandler<AddDoorCommand>
 {
-    private readonly IEventStore _eventStore;
-    private readonly IOfficeFactory _officeFactory;
+    private readonly IEventSourcedRepository<Office> _repository;
 
-    public AddDoorCommandHandler(IEventStore eventStore, IOfficeFactory officeFactory)
+    public AddDoorCommandHandler(IEventSourcedRepository<Office> repository)
     {
-        _eventStore = eventStore;
-        _officeFactory = officeFactory;
+        _repository = repository;
     }
 
     public async Task Handle(AddDoorCommand command, CancellationToken cancellationToken)
     {
-        var officeEvents = await _eventStore.GetEvents(command.Payload.OfficeId);
-        var office = _officeFactory.Rehydrate(officeEvents);
+        var office = await _repository.GetByIdAsync(command.Payload.OfficeId);
 
         if (office is not null)
         {
             office.AddDoor(command.Payload.DoorId);
-
-            foreach (var @event in office.GetChanges())
-            {
-                await _eventStore.SaveEvent(command.Payload.OfficeId, @event);
-            }
-
-            office.ClearChanges();   
+            await _repository.SaveAsync(office);
         }
     }
 }

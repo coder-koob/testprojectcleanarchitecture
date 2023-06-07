@@ -12,6 +12,10 @@ public class Office : Aggregate
     public string? Name;
     public IReadOnlyCollection<Door> Doors => _doors.AsReadOnly();
 
+    protected Office()
+    {
+    }
+
     internal Office(Guid id)
     {
         Id = id;
@@ -33,17 +37,18 @@ public class Office : Aggregate
     {
         switch (@event)
         {
-            case OfficeCreatedEvent officeCreated:
-                Name = officeCreated.Name;
+            case OfficeCreatedEvent e:
+                Id = e.AggregateId;
+                Name = e.Name;
                 break;
                 
-            case DoorAddedEvent doorAdded:
-                var door = new Door(doorAdded.DoorId);
+            case DoorAddedEvent e:
+                var door = new Door(e.DoorId);
                 _doors.Add(door);
                 break;
 
-            case DoorLockedEvent doorLocked:
-                var doorToLock = _doors.First(d => d.Id == doorLocked.DoorId);
+            case DoorLockedEvent e:
+                var doorToLock = _doors.First(d => d.Id == e.DoorId);
                 doorToLock.Lock();
                 break;
 

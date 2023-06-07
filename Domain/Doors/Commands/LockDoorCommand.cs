@@ -18,30 +18,21 @@ public class LockDoorCommand : Command<LockDoorPayload>
 
 public class LockDoorCommandHandler : IRequestHandler<LockDoorCommand>
 {
-    private readonly IEventStore _eventStore;
-    private readonly IOfficeFactory _officeFactory;
+    private readonly IEventSourcedRepository<Office> _repository;
 
-    public LockDoorCommandHandler(IEventStore eventStore, IOfficeFactory officeFactory)
+    public LockDoorCommandHandler(IEventSourcedRepository<Office> repository)
     {
-        _eventStore = eventStore;
-        _officeFactory = officeFactory;
+        _repository = repository;
     }
 
     public async Task Handle(LockDoorCommand command, CancellationToken cancellationToken)
     {
-        var officeEvents = await _eventStore.GetEvents(command.Payload.OfficeId);
-        var office = _officeFactory.Rehydrate(officeEvents);
+        var office = await _repository.GetByIdAsync(command.Payload.OfficeId);
 
         if (office is not null)
         {
             office.LockDoor(command.Payload.DoorId);
-
-            foreach (var @event in office.GetChanges())
-            {
-                await _eventStore.SaveEvent(command.Payload.OfficeId, @event);
-            }
-
-            office.ClearChanges();   
+            await _repository.SaveAsync(office);
         }
     }
 }
