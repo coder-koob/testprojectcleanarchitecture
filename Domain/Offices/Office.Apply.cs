@@ -16,7 +16,7 @@ public partial class Office
         switch (@event)
         {
             case OfficeCreatedEvent e:
-                Id = e.AggregateId;
+                AggregateId = e.AggregateId;
                 Name = e.Name;
                 break;
 
@@ -26,7 +26,7 @@ public partial class Office
                 break;
 
             case DoorLockedEvent e:
-                var doorToLock = _doors.First(d => d.Id == e.DoorId);
+                var doorToLock = _doors.First(d => d.DoorId == e.DoorId);
                 doorToLock.Lock();
                 break;
 

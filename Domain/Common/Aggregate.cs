@@ -4,7 +4,7 @@ public abstract class Aggregate
 {
     protected readonly List<Event> _changes = new();
 
-    public Guid Id { get; protected set; }
+    public Guid AggregateId { get; protected set; }
 
     public static T Rehydrate<T>(IEnumerable<Event> events) where T : Aggregate, new()
     {

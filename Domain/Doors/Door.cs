@@ -2,15 +2,16 @@ using Domain.Common;
 
 namespace Domain.Doors;
 
-public class Door : Entity
+public class Door
 {
-    public bool IsLocked { get; private set; }
-
     public Door(Guid doorId)
-        : base(doorId)
     {
+        DoorId = doorId;
         IsLocked = false;
     }
+
+    public Guid DoorId { get; set; }
+    public bool IsLocked { get; private set; }
 
     public void Lock()
     {

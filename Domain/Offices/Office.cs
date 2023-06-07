@@ -12,13 +12,13 @@ public partial class Office : Aggregate
     public string? Name;
     public IReadOnlyCollection<Door> Doors => _doors.AsReadOnly();
 
-    protected Office()
+    public Office()
     {
     }
 
     internal Office(Guid id)
     {
-        Id = id;
+        AggregateId = id;
     }
 
     public static Office Create(Guid id, string name)
@@ -35,24 +35,24 @@ public partial class Office : Aggregate
 
     public void AddDoor(Guid doorId)
     {
-        if (_doors.Any(d => d.Id == doorId))
+        if (_doors.Any(d => d.DoorId == doorId))
         {
             throw new Exception($"Door with id {doorId} already exists in the office.");
         }
 
-        var doorAddedEvent = new DoorAddedEvent(Id, doorId);
+        var doorAddedEvent = new DoorAddedEvent(AggregateId, doorId);
         ApplyChange(doorAddedEvent);
     }
 
     public void LockDoor(Guid doorId)
     {
-        var door = _doors.FirstOrDefault(d => d.Id == doorId) ?? throw new Exception($"Door with id {doorId} does not exist in the office.");
+        var door = _doors.FirstOrDefault(d => d.DoorId == doorId) ?? throw new Exception($"Door with id {doorId} does not exist in the office.");
         if (door.IsLocked)
         {
             throw new Exception($"Door with id {doorId} is already locked.");
         }
 
-        var doorLockedEvent = new DoorLockedEvent(Id, doorId);
+        var doorLockedEvent = new DoorLockedEvent(AggregateId, doorId);
         ApplyChange(doorLockedEvent);
     }
 }

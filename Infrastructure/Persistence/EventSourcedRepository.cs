@@ -24,7 +24,7 @@ public class EventSourcedRepository<T> : IEventSourcedRepository<T> where T : Ag
 
         foreach (var @event in changes)
         {
-            await _eventStore.SaveEvent(aggregate.Id, @event);
+            await _eventStore.SaveEvent(aggregate.AggregateId, @event);
         }
 
         aggregate.ClearChanges();

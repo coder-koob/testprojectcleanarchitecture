@@ -11,7 +11,8 @@ public static class ConfigureServices
     {
         services.Configure<MongoDbOptions>(configuration.GetSection("MongoDbSettings"));
         
-        services.AddSingleton<IEventStore, MongoDbEventStore>();
+        services.AddScoped<IEventStore, MongoDbEventStore>();
+        services.AddScoped(typeof(IEventSourcedRepository<>), typeof(EventSourcedRepository<>));
 
         return services;
     }

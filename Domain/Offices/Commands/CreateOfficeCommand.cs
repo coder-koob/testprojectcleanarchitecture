@@ -28,6 +28,6 @@ public class CreateOfficeCommandHandler : IRequestHandler<CreateOfficeCommand, G
         var office = Office.Create(Guid.NewGuid(), command.Payload.Name);
         await _officeRepository.SaveAsync(office);
 
-        return office.Id;
+        return office.AggregateId;
     }
 }
