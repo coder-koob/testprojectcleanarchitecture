@@ -4,7 +4,7 @@ namespace Domain.Offices;
 
 public interface IOfficeFactory
 {
-    Office Create(string officeId);
+    Office Create(Guid officeId, string name);
 
     Office? Rehydrate(IEnumerable<Event> events);
 }

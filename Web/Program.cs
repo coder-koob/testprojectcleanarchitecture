@@ -1,10 +1,14 @@
+using Application;
+using Domain;
 using Infrastructure;
 using Web;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
+builder.Services.AddDomainServices();
 builder.Services.AddWebServices();
 
 var app = builder.Build();

@@ -4,12 +4,11 @@ namespace Domain.Doors.Events;
 
 public class DoorAddedEvent : Event
 {
-    public string OfficeId { get; }
-    public string DoorId { get; }
+    public Guid OfficeId { get; }
 
-    public DoorAddedEvent(string officeId, string doorId)
+    public DoorAddedEvent(Guid officeId, Guid doorId)
     {
         OfficeId = officeId;
-        DoorId = doorId;
+        Id = doorId;
     }
 }

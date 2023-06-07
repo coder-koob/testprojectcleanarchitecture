@@ -6,7 +6,7 @@ using MediatR;
 
 namespace Domain.Doors.Commands;
 
-public record LockDoorPayload(string OfficeId, string DoorId);
+public record LockDoorPayload(Guid OfficeId, Guid DoorId);
 
 public class LockDoorCommand : Command<LockDoorPayload>
 {
@@ -34,6 +34,8 @@ public class LockDoorCommandHandler : IRequestHandler<LockDoorCommand>
 
         if (office is not null)
         {
+            office.LockDoor(command.Payload.DoorId);
+
             foreach (var @event in office.GetChanges())
             {
                 await _eventStore.SaveEvent(command.Payload.OfficeId, @event);

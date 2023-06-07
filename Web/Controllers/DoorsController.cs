@@ -1,9 +1,9 @@
 using Application.Doors.CommandRequests;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Web.Controllers.Doors;
+namespace Web.Controllers;
 
-public class DoorController : ApiControllerBase
+public class DoorsController : ApiControllerBase
 {   
     [HttpPost]
     public async Task<IActionResult> AddDoor([FromBody] AddDoorCommandRequest commandRequest)

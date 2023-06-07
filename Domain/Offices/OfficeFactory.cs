@@ -1,13 +1,14 @@
 using Domain.Common;
 using Domain.Doors.Events;
+using Domain.Offices.Events;
 
 namespace Domain.Offices;
 
 public class OfficeFactory : IOfficeFactory
 {
-    public Office Create(string officeId)
+    public Office Create(Guid officeId, string name)
     {
-        return new Office(officeId);
+        return new Office(officeId, name);
     }
 
     public Office? Rehydrate(IEnumerable<Event> events)
@@ -18,16 +19,16 @@ public class OfficeFactory : IOfficeFactory
         {
             switch (@event)
             {
-                // case OfficeCreatedEvent officeCreated:
-                //     office = Create(officeCreated.OfficeId);
-                //     break;
+                case OfficeCreatedEvent officeCreated:
+                    office = Create(officeCreated.Id, officeCreated.Name);
+                    break;
 
                 case DoorAddedEvent doorAdded:
-                    office?.AddDoor(doorAdded.DoorId);
+                    office?.Apply(doorAdded);
                     break;
 
                 case DoorLockedEvent doorLocked:
-                    office?.LockDoor(doorLocked.DoorId);
+                    office?.Apply(doorLocked);
                     break;
 
                 // handle other event types...

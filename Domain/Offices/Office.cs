@@ -1,64 +1,69 @@
 using Domain.Common;
 using Domain.Doors;
 using Domain.Doors.Events;
+using Domain.Offices.Events;
 
 namespace Domain.Offices;
 
-public class Office
+public class Office : Aggregate
 {
     private readonly List<Door> _doors = new();
-    private readonly List<Event> _changes = new();
 
-    public string OfficeId { get; private set; }
+    public string? Name;
     public IReadOnlyCollection<Door> Doors => _doors.AsReadOnly();
 
-    public Office(string officeId)
+    public Office(Guid id, string name)
     {
-        OfficeId = officeId;
+        Id = id;
+        Name = name;
+        Apply(new OfficeCreatedEvent(id, name));
     }
 
-    public void AddDoor(string doorId)
+    public override void Apply(Event @event)
     {
-        if (_doors.Any(d => d.DoorId == doorId))
+        switch (@event)
+        {
+            case OfficeCreatedEvent officeCreated:
+                Name = officeCreated.Name;
+                break;
+                
+            case DoorAddedEvent doorAdded:
+                var door = new Door(doorAdded.Id);
+                _doors.Add(door);
+                break;
+
+            case DoorLockedEvent doorLocked:
+                var doorToLock = _doors.First(d => d.Id == doorLocked.Id);
+                doorToLock.Lock();
+                break;
+
+            default:
+                throw new Exception($"Unhandled event type: {@event.GetType().FullName}");
+        }
+
+        base.Apply(@event);
+    }
+
+    public void AddDoor(Guid doorId)
+    {
+        if (_doors.Any(d => d.Id == doorId))
         {
             throw new Exception($"Door with id {doorId} already exists in the office.");
         }
 
         var door = new Door(doorId);
         _doors.Add(door);
-
-        var @event = new DoorAddedEvent(OfficeId, doorId);
-        _changes.Add(@event);
     }
 
-    public void LockDoor(string doorId)
+    public void LockDoor(Guid doorId)
     {
-        var door = _doors.FirstOrDefault(d => d.DoorId == doorId);
-
-        if (door == null)
-        {
-            throw new Exception($"Door with id {doorId} does not exist in the office.");
-        }
-
+        var door = _doors.FirstOrDefault(d => d.Id == doorId) ?? throw new Exception($"Door with id {doorId} does not exist in the office.");
         if (door.IsLocked)
         {
             throw new Exception($"Door with id {doorId} is already locked.");
         }
 
         door.Lock();
-
-        var @event = new DoorLockedEvent(OfficeId, doorId);
-        _changes.Add(@event);
-    }
-
-    public IEnumerable<Event> GetChanges()
-    {
-        return _changes.AsReadOnly();
-    }
-
-    public void ClearChanges()
-    {
-        _changes.Clear();
     }
 }
 

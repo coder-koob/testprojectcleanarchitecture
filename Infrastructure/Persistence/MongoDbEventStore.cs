@@ -15,12 +15,12 @@ public class MongoDbEventStore : IEventStore
         _events = database.GetCollection<Event>("events");
     }
 
-    public async Task SaveEvent(string aggregateId, Event @event)
+    public async Task SaveEvent(Guid aggregateId, Event @event)
     {
         await _events.InsertOneAsync(@event);
     }
 
-    public async Task<IEnumerable<Event>> GetEvents(string aggregateId)
+    public async Task<IEnumerable<Event>> GetEvents(Guid aggregateId)
     {
         var filter = Builders<Event>.Filter.Eq(e => e.AggregateId, aggregateId);
         return await _events.Find(filter).ToListAsync();

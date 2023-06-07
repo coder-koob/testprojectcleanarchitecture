@@ -2,7 +2,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Infrastructure.Persistence;
 using Domain.Interfaces;
-using Infrastructure.MongoDb;
 
 namespace Infrastructure;
 

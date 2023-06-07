@@ -5,14 +5,14 @@ namespace Application.Doors.CommandRequests;
 
 public class AddDoorCommandRequest : IRequest
 {
-    public AddDoorCommandRequest(string officeId, string doorId)
+    public AddDoorCommandRequest(Guid officeId, Guid doorId)
     {
         OfficeId = officeId;
         DoorId = doorId;
     }
 
-    public string OfficeId { get; private set; }
-    public string DoorId { get; private set; }
+    public Guid OfficeId { get; private set; }
+    public Guid DoorId { get; private set; }
 }
 
 public class AddDoorCommandRequestHandler : IRequestHandler<AddDoorCommandRequest>

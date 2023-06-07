@@ -5,8 +5,7 @@ using MediatR;
 
 namespace Domain.Doors.Commands;
 
-
-public record AddDoorPayload(string OfficeId, string DoorId);
+public record AddDoorPayload(Guid OfficeId, Guid DoorId);
 
 public class AddDoorCommand : Command<AddDoorPayload>
 {
@@ -32,10 +31,10 @@ public class AddDoorCommandHandler : IRequestHandler<AddDoorCommand>
         var officeEvents = await _eventStore.GetEvents(command.Payload.OfficeId);
         var office = _officeFactory.Rehydrate(officeEvents);
 
-        office?.AddDoor(command.Payload.DoorId);
-
         if (office is not null)
         {
+            office.AddDoor(command.Payload.DoorId);
+
             foreach (var @event in office.GetChanges())
             {
                 await _eventStore.SaveEvent(command.Payload.OfficeId, @event);

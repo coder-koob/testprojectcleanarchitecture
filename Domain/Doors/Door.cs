@@ -1,18 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Domain.Common;
 
 namespace Domain.Doors;
 
-public class Door
+public class Door : Entity
 {
-    public string DoorId { get; private set; }
     public bool IsLocked { get; private set; }
 
-    public Door(string doorId)
+    public Door(Guid doorId)
+        : base(doorId)
     {
-        DoorId = doorId;
         IsLocked = false;
     }
 
