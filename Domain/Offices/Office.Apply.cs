@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Domain.Common;
 using Domain.Doors;
 using Domain.Doors.Events;
+using Domain.Offices.Commands;
 using Domain.Offices.Events;
 
 namespace Domain.Offices;
@@ -16,8 +18,8 @@ public partial class Office
         switch (@event)
         {
             case OfficeCreatedEvent e:
-                AggregateId = e.AggregateId;
-                Name = e.Name;
+                OfficeId = e.OfficeId;
+                Name = JsonSerializer.Deserialize<CreateOfficePayload>(e.Payload)?.Name;
                 break;
 
             case DoorAddedEvent e:

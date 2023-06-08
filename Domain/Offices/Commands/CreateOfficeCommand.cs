@@ -25,9 +25,9 @@ public class CreateOfficeCommandHandler : IRequestHandler<CreateOfficeCommand, G
 
     public async Task<Guid> Handle(CreateOfficeCommand command, CancellationToken cancellationToken)
     {
-        var office = Office.Create(Guid.NewGuid(), command.Payload.Name);
-        await _officeRepository.SaveAsync(office);
+        var office = Office.Create(Guid.NewGuid(), command);
+        await _officeRepository.SaveAsync(office.OfficeId, office);
 
-        return office.AggregateId;
+        return office.OfficeId;
     }
 }

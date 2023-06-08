@@ -1,46 +1,49 @@
 using Domain.Common;
 using Domain.Doors;
+using Domain.Doors.Commands;
 using Domain.Doors.Events;
+using Domain.Offices.Commands;
 using Domain.Offices.Events;
 
 namespace Domain.Offices;
 
-public partial class Office : Aggregate
+public partial class Office : Entity
 {
     private readonly List<Door> _doors = new();
-
-    public string? Name;
-    public IReadOnlyCollection<Door> Doors => _doors.AsReadOnly();
 
     public Office()
     {
     }
 
-    internal Office(Guid id)
+    internal Office(Guid officeId)
     {
-        AggregateId = id;
+        OfficeId = officeId;
     }
 
-    public static Office Create(Guid id, string name)
+    public Guid OfficeId;
+    public string? Name;
+    public IReadOnlyCollection<Door> Doors => _doors.AsReadOnly();
+
+    public static Office Create(Guid id, CreateOfficeCommand command)
     {
         var office = new Office(id)
         {
-            Name = name
+            Name = command.Payload.Name
         };
 
-        office.ApplyChange(new OfficeCreatedEvent(id, name));
+        office.ApplyChange(new OfficeCreatedEvent(id, command));
 
         return office;
     }
 
-    public void AddDoor(Guid doorId)
+    public void AddDoor(AddDoorCommand command)
     {
-        if (_doors.Any(d => d.DoorId == doorId))
+        if (_doors.Any(d => d.DoorId == command.Payload.DoorId))
         {
-            throw new Exception($"Door with id {doorId} already exists in the office.");
+            throw new Exception($"Door with id {command.Payload.DoorId} already exists in the office.");
         }
 
-        var doorAddedEvent = new DoorAddedEvent(AggregateId, doorId);
+        var doorAddedEvent = new DoorAddedEvent(OfficeId, command);
         ApplyChange(doorAddedEvent);
     }
 
@@ -52,7 +55,7 @@ public partial class Office : Aggregate
             throw new Exception($"Door with id {doorId} is already locked.");
         }
 
-        var doorLockedEvent = new DoorLockedEvent(AggregateId, doorId);
+        var doorLockedEvent = new DoorLockedEvent(OfficeId, doorId);
         ApplyChange(doorLockedEvent);
     }
 }

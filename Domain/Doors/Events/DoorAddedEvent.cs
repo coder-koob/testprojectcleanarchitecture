@@ -1,14 +1,19 @@
+using System.Text.Json;
 using Domain.Common;
+using Domain.Doors.Commands;
 
 namespace Domain.Doors.Events;
 
 public class DoorAddedEvent : Event
 {
-    public DoorAddedEvent(Guid officeId, Guid doorId)
+    public DoorAddedEvent(Guid officeId, AddDoorCommand command)
+        : base (officeId)
     {
-        DoorId = doorId;
-        AggregateId = officeId;
+        DoorId = command.Payload.DoorId;
+        Payload = JsonSerializer.Serialize(command.Payload);
+        OfficeId = officeId;
     }
-
+    
+    public Guid OfficeId { get; private set; }
     public Guid DoorId { get; private set; }
 }

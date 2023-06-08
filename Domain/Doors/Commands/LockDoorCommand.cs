@@ -32,7 +32,7 @@ public class LockDoorCommandHandler : IRequestHandler<LockDoorCommand>
         if (office is not null)
         {
             office.LockDoor(command.Payload.DoorId);
-            await _repository.SaveAsync(office);
+            await _repository.SaveAsync(office.OfficeId, office);
         }
     }
 }

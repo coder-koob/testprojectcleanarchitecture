@@ -1,12 +1,10 @@
 namespace Domain.Common;
 
-public abstract class Aggregate
+public abstract class Entity
 {
     protected readonly List<Event> _changes = new();
 
-    public Guid AggregateId { get; protected set; }
-
-    public static T Rehydrate<T>(IEnumerable<Event> events) where T : Aggregate, new()
+    public static T Rehydrate<T>(IEnumerable<Event> events) where T : Entity, new()
     {
         var instance = new T();
         foreach (var @event in events)

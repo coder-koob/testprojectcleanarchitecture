@@ -30,8 +30,8 @@ public class AddDoorCommandHandler : IRequestHandler<AddDoorCommand>
 
         if (office is not null)
         {
-            office.AddDoor(command.Payload.DoorId);
-            await _repository.SaveAsync(office);
+            office.AddDoor(command);
+            await _repository.SaveAsync(office.OfficeId, office);
         }
     }
 }

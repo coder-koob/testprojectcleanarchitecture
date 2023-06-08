@@ -1,18 +1,17 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Text.Json;
 using Domain.Common;
+using Domain.Offices.Commands;
 
 namespace Domain.Offices.Events;
 
 public class OfficeCreatedEvent : Event
 {
-    public OfficeCreatedEvent(Guid id, string name)
+    public OfficeCreatedEvent(Guid officeId, CreateOfficeCommand command)
+        : base(officeId)
     {
-        AggregateId = id;
-        Name = name;
+        OfficeId = officeId;
+        Payload = JsonSerializer.Serialize(command.Payload);
     }
 
-    public string Name { get; set; }
+    public Guid OfficeId { get; private set; }
 }

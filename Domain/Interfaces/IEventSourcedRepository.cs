@@ -6,8 +6,8 @@ using Domain.Common;
 
 namespace Domain.Interfaces;
 
-public interface IEventSourcedRepository<T> where T : Aggregate
+public interface IEventSourcedRepository<T> where T : Entity
 {
     Task<T> GetByIdAsync(Guid id);
-    Task SaveAsync(T aggregate);
+    Task SaveAsync(Guid aggregateId, T entity);
 }
