@@ -2,26 +2,22 @@ using MediatR;
 
 namespace Domain.Common;
 
-public abstract class Command<T> : IRequest
+public abstract class Command<TPayload> : IRequest
 {
-    public Command(string topic, T payload)
+    protected Command(TPayload payload)
     {
-        Topic = topic;
         Payload = payload;
     }
 
-    public string Topic { get; }
-    public T Payload { get; }
+    public TPayload Payload { get; }
 }
 
-public abstract class Command<T,R> : IRequest<R>
+public abstract class Command<TPayload,TResponse> : IRequest<TResponse>
 {
-    public Command(string topic, T payload)
+    protected Command(TPayload payload)
     {
-        Topic = topic;
         Payload = payload;
     }
 
-    public string Topic { get; }
-    public T Payload { get; }
+    public TPayload Payload { get; }
 }

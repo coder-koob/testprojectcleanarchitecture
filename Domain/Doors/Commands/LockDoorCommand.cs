@@ -11,7 +11,7 @@ public record LockDoorPayload(Guid OfficeId, Guid DoorId);
 public class LockDoorCommand : Command<LockDoorPayload>
 {
     public LockDoorCommand(LockDoorPayload payload)
-        : base("LockDoor", payload)
+        : base(payload)
     {
     }
 }
