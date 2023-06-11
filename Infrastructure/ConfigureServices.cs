@@ -8,6 +8,12 @@ using Application.Offices.ReadModels;
 using Application.Doors.ReadModels;
 using Domain.Common;
 using MongoDB.Bson.Serialization;
+using Infrastructure.Identity;
+using Microsoft.AspNetCore.Identity;
+using Application.Common.Services;
+using Microsoft.AspNetCore.Authentication;
+using Infrastructure.Persistence.SqlServer;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure;
 
@@ -38,6 +44,26 @@ public static class ConfigureServices
         
         services.AddScoped<IEventStore, MongoDbEventStore>();
         services.AddScoped(typeof(IEventSourcedRepository<>), typeof(EventSourcedRepository<>));
+
+        services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
+                    builder => builder.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
+
+        services
+            .AddDefaultIdentity<ApplicationUser>()
+            .AddRoles<IdentityRole>()
+            .AddEntityFrameworkStores<ApplicationDbContext>();
+
+        services.AddIdentityServer()
+            .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
+
+        services.AddTransient<IIdentityService, IdentityService>();
+
+        services.AddAuthentication()
+            .AddIdentityServerJwt();
+
+        services.AddAuthorization(options =>
+            options.AddPolicy("CanPurge", policy => policy.RequireRole("Administrator")));
 
         return services;
     }
