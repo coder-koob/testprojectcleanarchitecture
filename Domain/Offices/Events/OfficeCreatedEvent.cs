@@ -10,8 +10,9 @@ public class OfficeCreatedEvent : Event
         : base(officeId)
     {
         OfficeId = officeId;
-        Payload = JsonSerializer.Serialize(command.Payload);
+        Name = command.Payload.Name;
     }
 
     public Guid OfficeId { get; private set; }
+    public string Name { get; private set; }
 }

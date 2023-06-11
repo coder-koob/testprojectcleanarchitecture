@@ -18,13 +18,13 @@ public class EventSourcedRepository<T> : IEventSourcedRepository<T> where T : En
         return Entity.Rehydrate<T>(events);
     }
 
-    public async Task SaveAsync(Guid aggregateId, T entity)
+    public async Task SaveAsync(T entity)
     {
         var changes = entity.GetChanges();
 
         foreach (var @event in changes)
         {
-            await _eventStore.SaveEvent(aggregateId, @event);
+            await _eventStore.SaveEvent(@event);
         }
 
         entity.ClearChanges();

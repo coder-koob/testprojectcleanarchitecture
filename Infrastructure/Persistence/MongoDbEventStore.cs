@@ -11,11 +11,11 @@ public class MongoDbEventStore : IEventStore
     public MongoDbEventStore(IOptions<MongoDbOptions> mongoDbOptions)
     {
         var client = new MongoClient(mongoDbOptions.Value.ConnectionString);
-        var database = client.GetDatabase("eventstore");
-        _events = database.GetCollection<Event>("events");
+        var database = client.GetDatabase(mongoDbOptions.Value.Database);
+        _events = database.GetCollection<Event>(mongoDbOptions.Value.Collection);
     }
 
-    public async Task SaveEvent(Guid aggregateId, Event @event)
+    public async Task SaveEvent(Event @event)
     {
         await _events.InsertOneAsync(@event);
     }

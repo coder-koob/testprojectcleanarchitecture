@@ -10,7 +10,7 @@ public static class ConfigureServices
     {
         // services.AddAutoMapper(Assembly.GetExecutingAssembly()); Maybe?
         // services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly()); TODO
-        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+        // services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
         return services;
     }

@@ -9,5 +9,5 @@ namespace Domain.Interfaces;
 public interface IEventSourcedRepository<T> where T : Entity
 {
     Task<T> GetByIdAsync(Guid id);
-    Task SaveAsync(Guid aggregateId, T entity);
+    Task SaveAsync(T entity);
 }

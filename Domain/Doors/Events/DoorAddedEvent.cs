@@ -10,7 +10,6 @@ public class DoorAddedEvent : Event
         : base (officeId)
     {
         DoorId = command.Payload.DoorId;
-        Payload = JsonSerializer.Serialize(command.Payload);
         OfficeId = officeId;
     }
     

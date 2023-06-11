@@ -1,6 +1,8 @@
+using MediatR;
+
 namespace Domain.Common;
 
-public class Event
+public class Event : INotification
 {
     public Event(Guid aggregateId)
     {
@@ -11,5 +13,4 @@ public class Event
     public Guid AggregateId { get; private set; }
     public int Version { get; set; }
     public string? Type { get; set; }
-    public string? Payload { get; set; }
 }
