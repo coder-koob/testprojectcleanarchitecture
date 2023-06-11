@@ -1,8 +1,7 @@
 using Application.Doors.Models;
 using Domain.Common;
-using Domain.Doors;
 
-namespace Application.ReadModels;
+namespace Application.Offices.ReadModels;
 
 public class OfficeReadModel : ReadModel
 {

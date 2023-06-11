@@ -12,6 +12,6 @@ public class DoorUnlockedEvent : Event
         DoorId = command.Payload.DoorId;
     }
 
-    public Guid DoorId { get; }
-    public Guid OfficeId { get; }
+    public Guid OfficeId { get; private set; }
+    public Guid DoorId { get; private set; }
 }

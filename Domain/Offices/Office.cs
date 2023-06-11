@@ -63,9 +63,9 @@ public partial class Office : Entity
     {
         var doorId = command.Payload.DoorId;
         var door = _doors.FirstOrDefault(d => d.DoorId == doorId) ?? throw new Exception($"Door with id {doorId} does not exist in the office.");
-        if (door.IsLocked)
+        if (!door.IsLocked)
         {
-            throw new Exception($"Door with id {doorId} is already locked.");
+            throw new Exception($"Door with id {doorId} is already unlocked.");
         }
 
         var @event = new DoorUnlockedEvent(OfficeId, command);

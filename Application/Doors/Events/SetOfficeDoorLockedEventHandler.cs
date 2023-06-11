@@ -1,5 +1,5 @@
 using Application.Doors.Models;
-using Application.ReadModels;
+using Application.Offices.ReadModels;
 using Domain.Doors.Events;
 using Domain.Interfaces;
 using MediatR;

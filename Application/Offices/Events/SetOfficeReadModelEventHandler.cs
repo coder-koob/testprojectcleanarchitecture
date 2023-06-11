@@ -1,4 +1,4 @@
-using Application.ReadModels;
+using Application.Offices.ReadModels;
 using Domain.Interfaces;
 using Domain.Offices.Events;
 using MediatR;

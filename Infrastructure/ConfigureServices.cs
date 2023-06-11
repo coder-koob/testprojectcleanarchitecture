@@ -4,7 +4,7 @@ using Infrastructure.Persistence;
 using Domain.Interfaces;
 using StackExchange.Redis;
 using Infrastructure.ReadModels;
-using Application.ReadModels;
+using Application.Offices.ReadModels;
 
 namespace Infrastructure;
 
