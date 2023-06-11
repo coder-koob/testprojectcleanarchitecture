@@ -25,4 +25,9 @@ public class MongoDbEventStore : IEventStore
         var filter = Builders<Event>.Filter.Eq(e => e.AggregateId, aggregateId);
         return await _events.Find(filter).ToListAsync();
     }
+
+    public Task<int> GetLatestVersionAsync(Guid aggregateId)
+    {
+        throw new NotImplementedException();
+    }
 }

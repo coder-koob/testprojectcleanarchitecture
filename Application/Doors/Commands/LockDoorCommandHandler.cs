@@ -24,7 +24,7 @@ public class LockDoorCommandHandler : IRequestHandler<LockDoorCommand>
 
         if (office is not null)
         {
-            office.LockDoor(command.Payload.DoorId);
+            office.LockDoor(command);
             await _repository.SaveAsync(office);
         }
     }

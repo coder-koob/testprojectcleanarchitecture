@@ -1,3 +1,4 @@
+using Domain.Common;
 using Domain.Interfaces;
 using Domain.Offices;
 using Domain.Offices.Commands;
@@ -5,7 +6,7 @@ using MediatR;
 
 namespace Application.Offices.Commands;
 
-public class CreateOfficeCommandHandler : IRequestHandler<CreateOfficeCommand, Guid>
+public class CreateOfficeCommandHandler : CommandHandler<CreateOfficeCommand, Guid>
 {
     private readonly IEventSourcedRepository<Office> _officeRepository;
 
@@ -14,7 +15,7 @@ public class CreateOfficeCommandHandler : IRequestHandler<CreateOfficeCommand, G
         _officeRepository = officeRepository;
     }
 
-    public async Task<Guid> Handle(CreateOfficeCommand command, CancellationToken cancellationToken)
+    protected override async Task<Guid> HandleCommand(CreateOfficeCommand command, CancellationToken cancellationToken)
     {
         var office = Office.Create(Guid.NewGuid(), command);
         await _officeRepository.SaveAsync(office);

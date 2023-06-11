@@ -1,11 +1,33 @@
+using Domain.Doors.Commands;
 using MediatR;
 
 namespace Application.Doors.CommandRequests;
 
-public class UnlockDoorCommandRequest : IRequestHandler<AddDoorCommandRequest>
+public class UnlockDoorCommandRequest : IRequest
 {
-    public Task Handle(AddDoorCommandRequest request, CancellationToken cancellationToken)
+    public UnlockDoorCommandRequest(Guid officeId, Guid doorId)
     {
-        throw new NotImplementedException();
+        OfficeId = officeId;
+        DoorId = doorId;
+    }
+
+    public Guid OfficeId { get; private set; }
+    public Guid DoorId { get; set; }
+}
+
+public class UnlockDoorCommandRequestHandler : IRequestHandler<UnlockDoorCommandRequest>
+{
+    private readonly IMediator _mediator;
+
+    public UnlockDoorCommandRequestHandler(IMediator mediator)
+    {
+        _mediator = mediator;
+    }
+
+    public async Task Handle(UnlockDoorCommandRequest request, CancellationToken cancellationToken)
+    {
+        var command = new UnlockDoorCommand(new UnlockDoorPayload(request.OfficeId, request.DoorId));
+
+        await _mediator.Send(command, cancellationToken);
     }
 }

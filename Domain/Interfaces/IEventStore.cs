@@ -6,4 +6,5 @@ public interface IEventStore
 {
     Task SaveEvent(Event @event);
     Task<IEnumerable<Event>> GetEvents(Guid aggregateId);
+    Task<int> GetLatestVersionAsync(Guid aggregateId);
 }
