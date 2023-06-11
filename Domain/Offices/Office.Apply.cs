@@ -27,6 +27,11 @@ public partial class Office
                 doorToLock.ApplyEvent(e);
                 break;
 
+            case DoorUnlockedEvent e:
+                var doorToUnlock = _doors.First(d => d.DoorId == e.DoorId);
+                doorToUnlock.ApplyEvent(e);
+                break;
+
             default:
                 throw new Exception($"Unhandled event type: {@event.GetType().FullName}");
         }

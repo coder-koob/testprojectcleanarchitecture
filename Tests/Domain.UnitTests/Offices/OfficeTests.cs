@@ -100,4 +100,38 @@ public class OfficeTests
         Assert.Equal(officeId, doorLockedEvent!.OfficeId);
         Assert.Equal(doorId, doorLockedEvent!.DoorId);
     }
+
+    [Fact]
+    public void Office_UnlockDoor_Should_Unlock_The_Door()
+    {
+        // Arrange
+        var officeId = Guid.NewGuid();
+        var doorId = Guid.NewGuid();
+
+        var office = new Office(officeId, "test-office");
+
+        var addDoorCommand = new AddDoorCommand(new AddDoorPayload(officeId, doorId, "test-door"));
+
+        office.AddDoor(addDoorCommand);
+
+        var command = new UnlockDoorCommand(new UnlockDoorPayload(officeId, doorId));
+
+        // Act
+        office.UnlockDoor(command);
+        
+        // Assert
+        Assert.Single(office.Doors);
+
+        var changeEvents = office.GetChanges();
+        Assert.Equal(2, changeEvents.Count());
+
+        var @event = changeEvents.Last();
+
+        Assert.IsType<DoorUnlockedEvent>(@event);
+
+        var doorUnlockedEvent = @event as DoorUnlockedEvent;
+
+        Assert.Equal(officeId, doorUnlockedEvent!.OfficeId);
+        Assert.Equal(doorId, doorUnlockedEvent!.DoorId);
+    }
 }

@@ -30,4 +30,12 @@ public class OfficesController : ApiControllerBase
 
         return NoContent();
     }
+
+    [HttpPut("{officeId}/door/{doorId}/unlock")]
+    public async Task<IActionResult> UnlockDoor([FromRoute] Guid officeId, [FromRoute] Guid doorId)
+    {
+        await Mediator.Send(new UnlockDoorCommandRequest(officeId, doorId));
+
+        return NoContent();
+    }
 }

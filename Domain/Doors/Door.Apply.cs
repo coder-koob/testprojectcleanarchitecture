@@ -23,6 +23,10 @@ public partial class Door
                 Lock();
                 break;
 
+            case DoorUnlockedEvent:
+                Unlock();
+                break;
+
             default:
                 throw new Exception($"Unhandled event type: {@event.GetType().FullName}");
         }

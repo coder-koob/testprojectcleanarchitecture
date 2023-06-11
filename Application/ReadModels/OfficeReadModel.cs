@@ -1,3 +1,4 @@
+using Application.Doors.Models;
 using Domain.Common;
 using Domain.Doors;
 
@@ -14,5 +15,5 @@ public class OfficeReadModel : ReadModel
 
     public Guid OfficeId { get; set; }
     public string? Name { get; set; }
-    public IList<Door> Doors { get; set; } = new List<Door>();
+    public IList<DoorDto> Doors { get; set; } = new List<DoorDto>();
 }
