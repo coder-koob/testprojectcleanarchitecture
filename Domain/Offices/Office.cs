@@ -37,7 +37,7 @@ public partial class Office : Entity
         return office;
     }
 
-    public void AddDoor(AddDoorCommand command)
+    public Door AddDoor(AddDoorCommand command)
     {
         if (_doors.Any(d => d.Name == command.Payload.Name))
         {
@@ -46,6 +46,8 @@ public partial class Office : Entity
 
         var @event = new DoorAddedEvent(OfficeId, command);
         ApplyChange(@event);
+
+        return _doors.First(x => x.DoorId == command.Payload.DoorId);
     }
 
     public void LockDoor(LockDoorCommand command)

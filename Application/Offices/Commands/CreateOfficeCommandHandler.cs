@@ -6,7 +6,7 @@ using MediatR;
 
 namespace Application.Offices.Commands;
 
-public class CreateOfficeCommandHandler : CommandHandler<CreateOfficeCommand, Guid>
+public class CreateOfficeCommandHandler : CommandHandler<CreateOfficeCommand, Office>
 {
     private readonly IEventSourcedRepository<Office> _officeRepository;
 
@@ -15,11 +15,11 @@ public class CreateOfficeCommandHandler : CommandHandler<CreateOfficeCommand, Gu
         _officeRepository = officeRepository;
     }
 
-    protected override async Task<Guid> HandleCommand(CreateOfficeCommand command, CancellationToken cancellationToken)
+    protected override async Task<Office> HandleCommand(CreateOfficeCommand command, CancellationToken cancellationToken)
     {
         var office = Office.Create(Guid.NewGuid(), command);
         await _officeRepository.SaveAsync(office);
 
-        return office.OfficeId;
+        return office;
     }
 }

@@ -8,6 +8,11 @@ namespace Application.Offices.Queries;
 
 public class GetOfficeQuery : IRequest<OfficeDto>
 {
+    public GetOfficeQuery(Guid officeId)
+    {
+        OfficeId = officeId;
+    }
+
     public Guid OfficeId { get; set; }
 }
 
@@ -29,8 +34,8 @@ public class GetOfficeQueryHandler : IRequestHandler<GetOfficeQuery, OfficeDto>
             throw new NotFoundException(nameof(OfficeReadModel), request.OfficeId);
         }
         
-        var dto = new OfficeDto(readModel.OfficeId, readModel.Name, readModel.Doors);
+        var response = new OfficeDto(readModel.OfficeId, readModel.Name, readModel.Doors);
 
-        return dto;
+        return response;
     }
 }
