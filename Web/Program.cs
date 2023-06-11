@@ -1,6 +1,7 @@
 using Application;
 using Domain;
 using Infrastructure;
+using Infrastructure.Persistence.SqlServer;
 using Web;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,7 +17,16 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    
+    app.UseDeveloperExceptionPage();
+    app.UseMigrationsEndPoint();
+
+    // Initialise and seed database
+    using (var scope = app.Services.CreateScope())
+    {
+        var initialiser = scope.ServiceProvider.GetRequiredService<ApplicationDbContextInitialiser>();
+        await initialiser.InitialiseAsync();
+        await initialiser.SeedAsync();
+    }
 }
 else
 {

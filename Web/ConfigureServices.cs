@@ -33,7 +33,7 @@ public static class ConfigureServices
             var fluentValidationSchemaProcessor = serviceProvider.CreateScope().ServiceProvider.GetRequiredService<FluentValidationSchemaProcessor>();
             // Add the fluent validations schema processor
             configure.SchemaProcessors.Add(fluentValidationSchemaProcessor);
-            configure.Title = "CleanArchitecture API";
+            configure.Title = "Test Project CleanArchitecture API";
             configure.AddSecurity("JWT", Enumerable.Empty<string>(), new OpenApiSecurityScheme
             {
                 Type = OpenApiSecuritySchemeType.ApiKey,

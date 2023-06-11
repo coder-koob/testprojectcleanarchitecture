@@ -12,6 +12,16 @@ services:
       - '6380:6379'
     volumes:
       - 'redis-data:/data'
+  sqlserver:
+    image: 'mcr.microsoft.com/mssql/server:2022-latest'
+    environment:
+      SA_PASSWORD: "yourStrong(!)Password"
+      ACCEPT_EULA: "Y"
+    ports:
+      - '1435:1433'
+    volumes:
+      - 'sqlserver-data:/var/opt/mssql'
 volumes:
   mongodbdata:
   redis-data:
+  sqlserver-data:

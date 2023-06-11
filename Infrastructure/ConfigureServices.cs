@@ -14,6 +14,7 @@ using Application.Common.Services;
 using Microsoft.AspNetCore.Authentication;
 using Infrastructure.Persistence.SqlServer;
 using Microsoft.EntityFrameworkCore;
+using Application.Common.Security;
 
 namespace Infrastructure;
 
@@ -48,6 +49,10 @@ public static class ConfigureServices
         services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
                     builder => builder.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
+
+        services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
+
+        services.AddScoped<ApplicationDbContextInitialiser>();
 
         services
             .AddDefaultIdentity<ApplicationUser>()
