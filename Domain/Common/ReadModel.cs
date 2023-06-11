@@ -2,14 +2,17 @@ namespace Domain.Common;
 
 public abstract class ReadModel
 {
+    private readonly string _hashSet;
+
     protected ReadModel(string hashSet)
     {
-        HashSet = hashSet;
+        _hashSet = hashSet;
     }
-
-    public string HashSet { get; set; }
 
     public abstract int Version { get; }
 
-    public virtual string GenerateHashSetName() => $"{HashSet}|{Version}";
+    public virtual string GenerateHashSetName(string? id = null)
+    {
+        return string.IsNullOrEmpty(id) ? $"{_hashSet}|{Version}" : $"{_hashSet}|{Version}|{id}";
+    }
 }

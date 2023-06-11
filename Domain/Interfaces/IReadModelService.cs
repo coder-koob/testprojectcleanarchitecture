@@ -1,11 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Domain.Common;
 
 namespace Domain.Interfaces;
 
-public interface IReadModelService<TReadModel>
+public interface IReadModelService<TReadModel> where TReadModel : ReadModel, new()
 {
-    
+    Task<TReadModel?> GetByIdAsync(string id);
+    Task<TReadModel> SaveAsync(TReadModel readModel, string? id = null);
 }
