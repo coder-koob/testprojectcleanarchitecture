@@ -15,9 +15,10 @@ public partial class Office : Entity
     {
     }
 
-    internal Office(Guid officeId)
+    public Office(Guid officeId, string name)
     {
         OfficeId = officeId;
+        Name = name;
     }
 
     public Guid OfficeId;
@@ -26,10 +27,7 @@ public partial class Office : Entity
 
     public static Office Create(Guid id, CreateOfficeCommand command)
     {
-        var office = new Office(id)
-        {
-            Name = command.Payload.Name
-        };
+        var office = new Office(id, command.Payload.Name);
 
         office.ApplyChange(new OfficeCreatedEvent(id, command));
 
@@ -38,24 +36,25 @@ public partial class Office : Entity
 
     public void AddDoor(AddDoorCommand command)
     {
-        if (_doors.Any(d => d.DoorId == command.Payload.DoorId))
+        if (_doors.Any(d => d.Name == command.Payload.Name))
         {
-            throw new Exception($"Door with id {command.Payload.DoorId} already exists in the office.");
+            throw new Exception($"Door with name {command.Payload.Name} already exists in the office.");
         }
 
         var doorAddedEvent = new DoorAddedEvent(OfficeId, command);
         ApplyChange(doorAddedEvent);
     }
 
-    public void LockDoor(Guid doorId)
+    public void LockDoor(LockDoorCommand command)
     {
+        var doorId = command.Payload.DoorId;
         var door = _doors.FirstOrDefault(d => d.DoorId == doorId) ?? throw new Exception($"Door with id {doorId} does not exist in the office.");
         if (door.IsLocked)
         {
             throw new Exception($"Door with id {doorId} is already locked.");
         }
 
-        var doorLockedEvent = new DoorLockedEvent(OfficeId, doorId);
+        var doorLockedEvent = new DoorLockedEvent(OfficeId, command);
         ApplyChange(doorLockedEvent);
     }
 }

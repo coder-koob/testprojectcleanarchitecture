@@ -5,14 +5,14 @@ namespace Application.Doors.CommandRequests;
 
 public class AddDoorCommandRequest : IRequest
 {
-    public AddDoorCommandRequest(Guid officeId, Guid doorId)
+    public AddDoorCommandRequest(Guid officeId, string name)
     {
         OfficeId = officeId;
-        DoorId = doorId;
+        Name = name;
     }
 
     public Guid OfficeId { get; private set; }
-    public Guid DoorId { get; private set; }
+    public string Name { get; private set; }
 }
 
 public class AddDoorCommandRequestHandler : IRequestHandler<AddDoorCommandRequest>
@@ -26,7 +26,7 @@ public class AddDoorCommandRequestHandler : IRequestHandler<AddDoorCommandReques
 
     public async Task Handle(AddDoorCommandRequest request, CancellationToken cancellationToken)
     {
-        var command = new AddDoorCommand(new AddDoorPayload(request.OfficeId, request.DoorId));
+        var command = new AddDoorCommand(new AddDoorPayload(request.OfficeId, Guid.NewGuid(), request.Name));
 
         await _mediator.Send(command, cancellationToken);
     }

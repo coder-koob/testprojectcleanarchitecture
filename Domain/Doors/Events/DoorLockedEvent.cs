@@ -1,14 +1,15 @@
 using Domain.Common;
+using Domain.Doors.Commands;
 
 namespace Domain.Doors.Events;
 
 public class DoorLockedEvent : Event
 {
-    public DoorLockedEvent(Guid officeId, Guid doorId)
+    public DoorLockedEvent(Guid officeId, LockDoorCommand command)
         : base(officeId)
     {
         OfficeId = officeId;
-        DoorId = doorId;
+        DoorId = command.Payload.DoorId;
     }
 
     public Guid DoorId { get; }

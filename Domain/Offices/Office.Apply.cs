@@ -17,13 +17,14 @@ public partial class Office
                 break;
 
             case DoorAddedEvent e:
-                var door = new Door(e.DoorId);
+                var door = new Door();
+                door.ApplyEvent(e);
                 _doors.Add(door);
                 break;
 
             case DoorLockedEvent e:
                 var doorToLock = _doors.First(d => d.DoorId == e.DoorId);
-                doorToLock.Lock();
+                doorToLock.ApplyEvent(e);
                 break;
 
             default:

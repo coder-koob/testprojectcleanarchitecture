@@ -10,9 +10,11 @@ public class DoorAddedEvent : Event
         : base (officeId)
     {
         DoorId = command.Payload.DoorId;
+        Name = command.Payload.Name;
         OfficeId = officeId;
     }
     
     public Guid OfficeId { get; private set; }
     public Guid DoorId { get; private set; }
+    public string Name { get; private set; }
 }
