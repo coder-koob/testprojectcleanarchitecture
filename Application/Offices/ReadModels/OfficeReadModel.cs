@@ -15,4 +15,5 @@ public class OfficeReadModel : ReadModel
     public Guid OfficeId { get; set; }
     public string? Name { get; set; }
     public IList<DoorDto> Doors { get; set; } = new List<DoorDto>();
+    public override DateTimeOffset Timestamp { get; set; }
 }

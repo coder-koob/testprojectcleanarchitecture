@@ -26,9 +26,11 @@ public class SetOfficeDoorUnlockedEventHandler : INotificationHandler<DoorUnlock
 
         var door = readModel.Doors.FirstOrDefault(x => x.DoorId == notification.DoorId);
 
-        door ??= new DoorDto(notification.OfficeId, notification.DoorId);
+        door ??= new DoorDto(notification.OfficeId, notification.DoorId, notification.Timestamp);
 
         door.IsLocked = false;
+
+        readModel.Timestamp = notification.Timestamp;
 
         await _officeReadModelService.SaveAsync(readModel, notification.OfficeId.ToString());
     }

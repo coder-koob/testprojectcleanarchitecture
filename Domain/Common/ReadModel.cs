@@ -11,6 +11,8 @@ public abstract class ReadModel
 
     public abstract int Version { get; }
 
+    public abstract DateTimeOffset Timestamp { get; set; }
+
     public virtual string GenerateHashSetName(string? id = null)
     {
         return string.IsNullOrEmpty(id) ? $"{_hashSet}|{Version}" : $"{_hashSet}|{Version}|{id}";

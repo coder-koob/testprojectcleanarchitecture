@@ -5,6 +5,9 @@ using Domain.Interfaces;
 using StackExchange.Redis;
 using Infrastructure.ReadModels;
 using Application.Offices.ReadModels;
+using Application.Doors.ReadModels;
+using Domain.Common;
+using MongoDB.Bson.Serialization;
 
 namespace Infrastructure;
 
@@ -12,12 +15,26 @@ public static class ConfigureServices
 {
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
+        var assembly = typeof(Event).Assembly;
+
+        foreach (var type in assembly.GetTypes())
+        {
+            if (type.IsSubclassOf(typeof(Event)))
+            {
+                var method = typeof(BsonClassMap)
+                    .GetMethod("RegisterClassMap", new[] { typeof(Action<BsonClassMap>) })
+                    ?.MakeGenericMethod(type);
+                method?.Invoke(null, new object[] { new Action<BsonClassMap>(cm => cm.AutoMap()) });
+            }
+        }
+
         services.Configure<MongoDbOptions>(configuration.GetSection("MongoDbSettings"));
 
         var configurationOptions = ConfigurationOptions.Parse("127.0.0.1:6380");
         services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(configurationOptions));
 
         services.AddTransient<IReadModelService<OfficeReadModel>, RedisReadModelService<OfficeReadModel>>();
+        services.AddTransient<IReadModelService<DoorHistoryReadModel>, RedisReadModelService<DoorHistoryReadModel>>();
         
         services.AddScoped<IEventStore, MongoDbEventStore>();
         services.AddScoped(typeof(IEventSourcedRepository<>), typeof(EventSourcedRepository<>));

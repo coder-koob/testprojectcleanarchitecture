@@ -28,12 +28,14 @@ public class AddOfficeDoorsEventHandler : INotificationHandler<DoorAddedEvent>
 
         if (door is null)
         {
-            readModel.Doors.Add(new DoorDto(notification.OfficeId, notification.DoorId, notification.Name, false));
+            readModel.Doors.Add(new DoorDto(notification.OfficeId, notification.DoorId, notification.Name, false, notification.Timestamp));
         }
         else
         {
             door.Name = notification.Name;
         }
+
+        readModel.Timestamp = notification.Timestamp;
 
         await _officeReadModelService.SaveAsync(readModel, notification.OfficeId.ToString());
     }

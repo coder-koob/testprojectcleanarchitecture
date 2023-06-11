@@ -17,6 +17,7 @@ public class MongoDbEventStore : IEventStore
 
     public async Task SaveEvent(Event @event)
     {
+        @event.Timestamp = DateTimeOffset.Now;
         await _events.InsertOneAsync(@event);
     }
 

@@ -24,6 +24,8 @@ public class SetOfficeReadModelEventHandler : INotificationHandler<OfficeCreated
             Name = notification.Name,
         };
 
+        readModel.Timestamp = notification.Timestamp;
+
         await _officeReadModelService.SaveAsync(readModel, notification.OfficeId.ToString());
     }
 }
