@@ -42,6 +42,8 @@ app.UseSwaggerUi3(settings =>
     settings.DocumentPath = "/api/specification.json";
 });
 
+app.UseStaticFiles();
+
 app.UseRouting();
 
 app.UseAuthentication();

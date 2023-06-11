@@ -33,7 +33,7 @@ public partial class Office
                 break;
 
             default:
-                throw new Exception($"Unhandled event type: {@event.GetType().FullName}");
+                throw new InvalidOperationException($"Unhandled event type: {@event.GetType().FullName}");
         }
     }
 }

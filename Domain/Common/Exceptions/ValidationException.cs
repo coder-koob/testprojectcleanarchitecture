@@ -10,13 +10,29 @@ public class ValidationException : Exception
         Errors = new Dictionary<string, string[]>();
     }
 
+    public ValidationException(string property, string message)
+        : this()
+    {
+        var failures = new List<ValidationFailure>
+        {
+            new ValidationFailure(property, message)
+        };
+
+        Errors = ToErrorDictionary(failures);
+    }
+
     public ValidationException(IEnumerable<ValidationFailure> failures)
         : this()
     {
-        Errors = failures
-            .GroupBy(e => e.PropertyName, e => e.ErrorMessage)
-            .ToDictionary(failureGroup => failureGroup.Key, failureGroup => failureGroup.ToArray());
+        Errors = ToErrorDictionary(failures);
     }
 
     public IDictionary<string, string[]> Errors { get; }
+
+    private IDictionary<string, string[]> ToErrorDictionary(IEnumerable<ValidationFailure> failures)
+    {
+        return failures
+            .GroupBy(e => e.PropertyName, e => e.ErrorMessage)
+            .ToDictionary(failureGroup => failureGroup.Key, failureGroup => failureGroup.ToArray());
+    }
 }

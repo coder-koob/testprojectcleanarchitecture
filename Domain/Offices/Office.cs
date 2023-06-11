@@ -1,9 +1,11 @@
 using Domain.Common;
+using Domain.Common.Exceptions;
 using Domain.Doors;
 using Domain.Doors.Commands;
 using Domain.Doors.Events;
 using Domain.Offices.Commands;
 using Domain.Offices.Events;
+using FluentValidation.Results;
 
 namespace Domain.Offices;
 
@@ -39,7 +41,7 @@ public partial class Office : Entity
     {
         if (_doors.Any(d => d.Name == command.Payload.Name))
         {
-            throw new Exception($"Door with name {command.Payload.Name} already exists in the office.");
+            throw new ValidationException(nameof(AddDoor), $"Door with name {command.Payload.Name} already exists in the office.");
         }
 
         var @event = new DoorAddedEvent(OfficeId, command);
@@ -49,10 +51,10 @@ public partial class Office : Entity
     public void LockDoor(LockDoorCommand command)
     {
         var doorId = command.Payload.DoorId;
-        var door = _doors.FirstOrDefault(d => d.DoorId == doorId) ?? throw new Exception($"Door with id {doorId} does not exist in the office.");
+        var door = _doors.FirstOrDefault(d => d.DoorId == doorId) ?? throw new NotFoundException($"Door with id {doorId} does not exist in the office.");
         if (door.IsLocked)
         {
-            throw new Exception($"Door with id {doorId} is already locked.");
+            throw new ValidationException(nameof(LockDoor), $"Door with id {doorId} is already locked.");
         }
 
         var @event = new DoorLockedEvent(OfficeId, command);
@@ -62,10 +64,10 @@ public partial class Office : Entity
     public void UnlockDoor(UnlockDoorCommand command)
     {
         var doorId = command.Payload.DoorId;
-        var door = _doors.FirstOrDefault(d => d.DoorId == doorId) ?? throw new Exception($"Door with id {doorId} does not exist in the office.");
+        var door = _doors.FirstOrDefault(d => d.DoorId == doorId) ?? throw new NotFoundException($"Door with id {doorId} does not exist in the office.");
         if (!door.IsLocked)
         {
-            throw new Exception($"Door with id {doorId} is already unlocked.");
+            throw new ValidationException(nameof(UnlockDoor), $"Door with id {doorId} is already unlocked.");
         }
 
         var @event = new DoorUnlockedEvent(OfficeId, command);
