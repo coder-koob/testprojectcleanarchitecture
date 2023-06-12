@@ -33,7 +33,7 @@ public static class ConfigureServices
 
         services.Configure<MongoDbOptions>(configuration.GetSection("MongoDbSettings"));
 
-        var configurationOptions = ConfigurationOptions.Parse("127.0.0.1:6380");
+        var configurationOptions = ConfigurationOptions.Parse("redis:6379");
         services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(configurationOptions));
 
         services.AddTransient<IReadModelService<OfficeReadModel>, RedisReadModelService<OfficeReadModel>>();
@@ -51,7 +51,7 @@ public static class ConfigureServices
         services.AddAuthentication("Bearer")
             .AddJwtBearer(options =>
             {
-                options.Authority = "https://localhost:7055";
+                options.Authority = "https://localhost:443";
                 options.TokenValidationParameters.ValidateAudience = false;
             });
 
