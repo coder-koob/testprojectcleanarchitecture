@@ -12,21 +12,21 @@ public class LoggingBehaviour<TRequest> : IRequestPreProcessor<TRequest> where T
 {
     private readonly ILogger _logger;
     private readonly ICurrentUserService _currentUserService;
-    private readonly IClientService _identityService;
 
-    public LoggingBehaviour(ILogger<TRequest> logger, ICurrentUserService currentUserService, IClientService identityService)
+    public LoggingBehaviour(ILogger<TRequest> logger, ICurrentUserService currentUserService)
     {
         _logger = logger;
         _currentUserService = currentUserService;
-        _identityService = identityService;
     }
 
-    public async Task Process(TRequest request, CancellationToken cancellationToken)
+    public Task Process(TRequest request, CancellationToken cancellationToken)
     {
         var requestName = typeof(TRequest).Name;
         var clientId = _currentUserService.ClientId ?? string.Empty;
 
         _logger.LogInformation("Request: {Name} {@ClientId} {@Request}",
             requestName, clientId, request);
+            
+        return Task.CompletedTask;
     }
 }
