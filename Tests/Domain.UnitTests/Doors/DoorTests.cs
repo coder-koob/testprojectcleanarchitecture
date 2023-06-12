@@ -14,7 +14,7 @@ public class DoorTests
         var officeId = Guid.NewGuid();
         var doorId = Guid.NewGuid();
 
-        var door = new Door(officeId, doorId, "test");
+        var door = new Door(officeId, doorId, "test", "test");
 
         // Act
         door.Lock();
@@ -30,7 +30,7 @@ public class DoorTests
         var officeId = Guid.NewGuid();
         var doorId = Guid.NewGuid();
 
-        var door = new Door(officeId, doorId, "test");
+        var door = new Door(officeId, doorId, "test", "test");
 
         // Act
         door.Unlock();

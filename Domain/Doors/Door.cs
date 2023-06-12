@@ -10,18 +10,20 @@ public partial class Door : Entity
     {
     }
 
-    public Door(Guid officeId, Guid doorId, string name)
+    public Door(Guid officeId, Guid doorId, string name, string scope)
     {
         OfficeId = officeId;
         DoorId = doorId;
         Name = name;
         IsLocked = false;
+        Scope = scope;
     }
 
     public Guid OfficeId { get; set; }
     public Guid DoorId { get; set; }
     public string? Name { get; set; }
     public bool IsLocked { get; private set; }
+    public string? Scope { get; set; }
 
     public void Lock()
     {

@@ -12,7 +12,7 @@ public class ClientService : IClientService
         _clients = clients;
     }
 
-    public bool IsClientAuthorized(string clientId, string scope)
+    public bool IsClientAuthorized(string clientId, params string[] scopes)
     {
         var client = _clients.FirstOrDefault(c => c.ClientId == clientId);
 
@@ -21,6 +21,11 @@ public class ClientService : IClientService
             return false;
         }
 
-        return client.AllowedScopes.Contains(scope);
+        foreach (var scope in scopes)
+        {
+            return client.AllowedScopes.Contains(scope);
+        }
+
+        return false;
     }
 }

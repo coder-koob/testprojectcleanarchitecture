@@ -2,5 +2,5 @@ namespace Application.Common.Services;
 
 public interface IClientService
 {
-    bool IsClientAuthorized(string clientId, string scope);
+    bool IsClientAuthorized(string clientId, params string[] scopes);
 }

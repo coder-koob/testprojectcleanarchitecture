@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Domain.Common;
 using Domain.Doors.Events;
 
@@ -17,6 +13,7 @@ public partial class Door
                 OfficeId = e.OfficeId;
                 DoorId = e.DoorId;
                 Name = e.Name;
+                Scope = e.Scope;
                 break;
 
             case DoorLockedEvent:
