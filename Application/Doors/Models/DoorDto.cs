@@ -21,13 +21,14 @@ public class DoorDto
         Timestamp = timestamp;
     }
 
-    public DoorDto(Guid officeId, Guid doorId, string? name, bool isLocked, DateTimeOffset timestamp)
+    public DoorDto(Guid officeId, Guid doorId, string? name, bool isLocked, DateTimeOffset timestamp, string scope)
     {
         OfficeId = officeId;
         DoorId = doorId;
         Name = name;
         IsLocked = isLocked;
         Timestamp = timestamp;
+        Scope = scope;
     }
 
     public Guid OfficeId { get; set; }
@@ -35,4 +36,5 @@ public class DoorDto
     public string? Name { get; set; }
     public bool IsLocked { get; set; }
     public DateTimeOffset Timestamp { get; set; }
+    public string? Scope { get; set; }
 }

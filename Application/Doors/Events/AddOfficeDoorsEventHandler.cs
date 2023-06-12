@@ -28,7 +28,7 @@ public class AddOfficeDoorsEventHandler : INotificationHandler<DoorAddedEvent>
 
         if (door is null)
         {
-            readModel.Doors.Add(new DoorDto(notification.OfficeId, notification.DoorId, notification.Name, false, notification.Timestamp));
+            readModel.Doors.Add(new DoorDto(notification.OfficeId, notification.DoorId, notification.Name, false, notification.Timestamp, notification.Scope));
         }
         else
         {

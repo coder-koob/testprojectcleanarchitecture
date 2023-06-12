@@ -284,6 +284,9 @@
         "properties": {
           "name": {
             "type": "string"
+          },
+          "scope": {
+            "type": "string"
           }
         }
       }
