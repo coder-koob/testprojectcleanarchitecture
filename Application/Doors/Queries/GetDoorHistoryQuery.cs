@@ -1,3 +1,4 @@
+using Application.Common.Security;
 using Application.Doors.Models;
 using Application.Doors.ReadModels;
 using Domain.Common.Exceptions;
@@ -6,6 +7,7 @@ using MediatR;
 
 namespace Application.Doors.Queries;
 
+[Authorize(Scope = Config.ReadHistoryScope)]
 public class GetDoorHistoryQuery : IRequest<DoorHistoryDto>
 {
     public GetDoorHistoryQuery(Guid doorId)

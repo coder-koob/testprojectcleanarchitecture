@@ -2,12 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Application.Common.Security;
 using Application.Offices.Models;
 using Domain.Offices.Commands;
 using MediatR;
 
 namespace Application.Offices.CommandRequests;
 
+[Authorize(Scope = Config.CreateOfficeScope)]
 public class CreateOfficeCommandRequest : IRequest<OfficeCreatedDto>
 {
     public CreateOfficeCommandRequest(string name)

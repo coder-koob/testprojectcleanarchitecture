@@ -46,7 +46,7 @@ public class OfficeTests
 
         var office = new Office(officeId, "test-office");
 
-        var command = new AddDoorCommand(new AddDoorPayload(officeId, doorId, "test-door"));
+        var command = new AddDoorCommand(new AddDoorPayload(officeId, doorId, "test-door", "test"));
 
         // Act
         office.AddDoor(command);
@@ -76,7 +76,7 @@ public class OfficeTests
 
         var office = new Office(officeId, "test-office");
 
-        var addDoorCommand = new AddDoorCommand(new AddDoorPayload(officeId, doorId, "test-door"));
+        var addDoorCommand = new AddDoorCommand(new AddDoorPayload(officeId, doorId, "test-door", "test"));
 
         office.AddDoor(addDoorCommand);
 
@@ -110,7 +110,7 @@ public class OfficeTests
 
         var office = new Office(officeId, "test-office");
 
-        var addDoorCommand = new AddDoorCommand(new AddDoorPayload(officeId, doorId, "test-door"));
+        var addDoorCommand = new AddDoorCommand(new AddDoorPayload(officeId, doorId, "test-door", "test"));
 
         office.AddDoor(addDoorCommand);
 

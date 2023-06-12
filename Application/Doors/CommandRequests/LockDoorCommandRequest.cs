@@ -1,8 +1,10 @@
+using Application.Common.Security;
 using Domain.Doors.Commands;
 using MediatR;
 
 namespace Application.Doors.CommandRequests;
 
+[Authorize(Scope = Config.LockDoorScope)]
 public class LockDoorCommandRequest : IRequest
 {
     public LockDoorCommandRequest(Guid officeId, Guid doorId)

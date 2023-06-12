@@ -27,7 +27,7 @@ public class OfficesController : ApiControllerBase
     [HttpPost("{officeId}/door")]
     public async Task<IActionResult> AddDoor([FromRoute] Guid officeId, [FromBody] AddDoorRequest request, CancellationToken cancellationToken)
     {
-        var response = await Mediator.Send(new AddDoorCommandRequest(officeId, request.Name), cancellationToken);
+        var response = await Mediator.Send(new AddDoorCommandRequest(officeId, request.Name, request.Scope), cancellationToken);
 
         return CreatedAtAction(nameof(GetOffice), new { officeId = response.OfficeId }, response);
     }

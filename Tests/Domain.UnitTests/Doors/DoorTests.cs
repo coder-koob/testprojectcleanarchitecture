@@ -46,7 +46,7 @@ public class DoorTests
         var officeId = Guid.NewGuid();
         var doorId = Guid.NewGuid();
 
-        var command = new AddDoorCommand(new AddDoorPayload(officeId, doorId, "test"));
+        var command = new AddDoorCommand(new AddDoorPayload(officeId, doorId, "test", "test"));
 
         var @event = new DoorAddedEvent(officeId, command);
 

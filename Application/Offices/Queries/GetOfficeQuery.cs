@@ -1,3 +1,4 @@
+using Application.Common.Security;
 using Application.Offices.Models;
 using Application.Offices.ReadModels;
 using Domain.Common.Exceptions;
@@ -6,6 +7,7 @@ using MediatR;
 
 namespace Application.Offices.Queries;
 
+[Authorize(Scope = Config.ReadOfficeScope)]
 public class GetOfficeQuery : IRequest<OfficeDto>
 {
     public GetOfficeQuery(Guid officeId)

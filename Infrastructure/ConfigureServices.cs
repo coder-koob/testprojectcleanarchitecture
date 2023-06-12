@@ -8,12 +8,8 @@ using Application.Offices.ReadModels;
 using Application.Doors.ReadModels;
 using Domain.Common;
 using MongoDB.Bson.Serialization;
-using Infrastructure.Identity;
-using Microsoft.AspNetCore.Identity;
 using Application.Common.Services;
-using Microsoft.AspNetCore.Authentication;
-using Infrastructure.Persistence.SqlServer;
-using Microsoft.EntityFrameworkCore;
+using Infrastructure.Identity;
 using Application.Common.Security;
 
 namespace Infrastructure;
@@ -42,33 +38,30 @@ public static class ConfigureServices
 
         services.AddTransient<IReadModelService<OfficeReadModel>, RedisReadModelService<OfficeReadModel>>();
         services.AddTransient<IReadModelService<DoorHistoryReadModel>, RedisReadModelService<DoorHistoryReadModel>>();
-        
+
         services.AddScoped<IEventStore, MongoDbEventStore>();
         services.AddScoped(typeof(IEventSourcedRepository<>), typeof(EventSourcedRepository<>));
 
-        services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
-                    builder => builder.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
-
-        services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
-
-        services.AddScoped<ApplicationDbContextInitialiser>();
-
-        services
-            .AddDefaultIdentity<ApplicationUser>()
-            .AddRoles<IdentityRole>()
-            .AddEntityFrameworkStores<ApplicationDbContext>();
-
         services.AddIdentityServer()
-            .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
+            .AddInMemoryApiScopes(Config.ApiScopes)
+            .AddInMemoryClients(Config.Clients);
 
-        services.AddTransient<IIdentityService, IdentityService>();
+        services.AddTransient<IClientService, ClientService>();
 
-        services.AddAuthentication()
-            .AddIdentityServerJwt();
+        services.AddAuthentication("Bearer")
+            .AddJwtBearer(options =>
+            {
+                options.Authority = "https://localhost:7055";
+                options.TokenValidationParameters.ValidateAudience = false;
+            });
 
         services.AddAuthorization(options =>
-            options.AddPolicy("CanPurge", policy => policy.RequireRole("Administrator")));
+            options.AddPolicy("CreateOffice", policy =>
+            {
+                policy.RequireAuthenticatedUser();
+                policy.RequireClaim("scope", "createOffice");
+            })
+        );
 
         return services;
     }
