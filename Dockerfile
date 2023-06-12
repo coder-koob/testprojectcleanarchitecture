@@ -1,11 +1,11 @@
 # Use the official .NET SDK image as a parent image to build the app.
-FROM mcr.microsoft.com/dotnet/sdk:7.0 as build-env
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build-env
 
 # Set the working directory.
 WORKDIR /app
 
 # Copy the certificate into the build image.
-COPY ./cert.pfx /https/aspnetapp.pfx
+COPY ./aspnetapp.pfx /https/aspnetapp.pfx
 
 # Copy the csproj and restore as distinct layers.
 COPY ./Application/*.csproj ./Application/
@@ -21,18 +21,17 @@ RUN dotnet publish -c Release -o out ./Web/
 # Use the ASP.NET runtime image to run the app.
 FROM mcr.microsoft.com/dotnet/aspnet:7.0
 
+WORKDIR /app
+COPY --from=build-env /app/out .
+
 # Copy the certificate from the build image to the runtime image.
 COPY --from=build-env /https/aspnetapp.pfx /https/aspnetapp.pfx
 
-# Convert the pfx file to a pem file, and then to a crt file.
-RUN openssl pkcs12 -in /https/aspnetapp.pfx -out /usr/local/share/ca-certificates/aspnetapp.pem -nodes -password pass:YourPassword && \
-    openssl x509 -outform der -in /usr/local/share/ca-certificates/aspnetapp.pem -out /usr/local/share/ca-certificates/aspnetapp.crt
+# Convert pfx certificate to crt
+RUN openssl pkcs12 -in /https/aspnetapp.pfx -clcerts -nokeys -out /usr/local/share/ca-certificates/aspnetapp.crt -password pass:YourPassword
 
-# Update the trusted certificates.
-RUN chmod 644 /usr/local/share/ca-certificates/aspnetapp.crt && update-ca-certificates
-
-WORKDIR /app
-COPY --from=build-env /app/out .
+# Update ca-certificates
+RUN update-ca-certificates
 
 # Inform Docker that the container is listening on the specified port at runtime.
 EXPOSE 80

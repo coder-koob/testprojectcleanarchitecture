@@ -35,9 +35,9 @@ public class AuthorizationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRe
             var authorizeAttributesWithPolicies = authorizeAttributes.Where(a => !string.IsNullOrWhiteSpace(a.Scope));
             if (authorizeAttributesWithPolicies.Any())
             {
-                foreach (var policy in authorizeAttributesWithPolicies.Select(a => a.Scope))
+                foreach (var scope in authorizeAttributesWithPolicies.Select(a => a.Scope))
                 {
-                    var authorized = _clientService.IsClientAuthorized(_currentUserService.ClientId, policy);
+                    var authorized = _clientService.IsClientAuthorized(_currentUserService.ClientId, scope);
 
                     if (!authorized)
                     {

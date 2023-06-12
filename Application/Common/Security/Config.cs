@@ -4,8 +4,8 @@ namespace Application.Common.Security;
 
 public static class Config
 {
-    public const string GeneralAccess = "generalAccess";
-    public const string SecureAccess = "secureAccess";
+    public const string GeneralAccessScope = "generalAccess";
+    public const string SecureAccessScope = "secureAccess";
     public const string CreateOfficeScope = "createOffice";
     public const string LockDoorScope = "lockDoor";
     public const string UnlockDoorScope = "unlockDoor";
@@ -25,8 +25,8 @@ public static class Config
     public static IEnumerable<ApiScope> ApiScopes =>
         new List<ApiScope>
         {
-            new ApiScope(GeneralAccess, "General Access"),
-            new ApiScope(SecureAccess, "Secure Access"),
+            new ApiScope(GeneralAccessScope, "General Access"),
+            new ApiScope(SecureAccessScope, "Secure Access"),
             new ApiScope(CreateOfficeScope, "Create Office"),
             new ApiScope(LockDoorScope, "Lock Door"),
             new ApiScope(UnlockDoorScope, "Unlock Door"),
@@ -43,21 +43,21 @@ public static class Config
                 ClientId = EmployeeClientId,
                 AllowedGrantTypes = GrantTypes.ClientCredentials,
                 ClientSecrets = { new Secret(EmployeeClientSecret.Sha256()) },
-                AllowedScopes = { GeneralAccess, LockDoorScope, UnlockDoorScope }
+                AllowedScopes = { GeneralAccessScope, LockDoorScope, UnlockDoorScope }
             },
             new Client
             {
                 ClientId = OfficeManagerClientId,
                 AllowedGrantTypes = GrantTypes.ClientCredentials,
                 ClientSecrets = { new Secret(OfficeManagerClientSecret.Sha256()) },
-                AllowedScopes = { GeneralAccess, SecureAccess, AddDoorScope, ReadOfficeScope, LockDoorScope, UnlockDoorScope }
+                AllowedScopes = { GeneralAccessScope, SecureAccessScope, AddDoorScope, ReadOfficeScope, LockDoorScope, UnlockDoorScope }
             },
             new Client
             {
                 ClientId = DirectorClientId,
                 AllowedGrantTypes = GrantTypes.ClientCredentials,
                 ClientSecrets = { new Secret(DirectorClientSecret.Sha256()) },
-                AllowedScopes = { GeneralAccess, SecureAccess, CreateOfficeScope, AddDoorScope, ReadHistoryScope, ReadOfficeScope, LockDoorScope, UnlockDoorScope }
+                AllowedScopes = { GeneralAccessScope, SecureAccessScope, CreateOfficeScope, AddDoorScope, ReadHistoryScope, ReadOfficeScope, LockDoorScope, UnlockDoorScope }
             }
         };
 }

@@ -11,6 +11,7 @@ using MongoDB.Bson.Serialization;
 using Application.Common.Services;
 using Infrastructure.Identity;
 using Application.Common.Security;
+using Microsoft.IdentityModel.Logging;
 
 namespace Infrastructure;
 
@@ -31,9 +32,12 @@ public static class ConfigureServices
             }
         }
 
-        services.Configure<MongoDbOptions>(configuration.GetSection("MongoDbSettings"));
+        services.Configure<MongoDbOptions>(configuration.GetSection(MongoDbOptions.MongoDbSettings));
+        
+        var redisOptions = new RedisDbOptions();
+        configuration.GetSection(RedisDbOptions.RedisDbSettings).Bind(redisOptions);
 
-        var configurationOptions = ConfigurationOptions.Parse("redis:6379");
+        var configurationOptions = ConfigurationOptions.Parse(redisOptions.ConnectionString);
         services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(configurationOptions));
 
         services.AddTransient<IReadModelService<OfficeReadModel>, RedisReadModelService<OfficeReadModel>>();
@@ -48,18 +52,24 @@ public static class ConfigureServices
 
         services.AddTransient<IClientService, ClientService>();
 
+        IdentityModelEventSource.ShowPII = true;
+
         services.AddAuthentication("Bearer")
             .AddJwtBearer(options =>
             {
-                options.Authority = "https://localhost:443";
+                options.Authority = "https://localhost:7055";
                 options.TokenValidationParameters.ValidateAudience = false;
+
+                #if DEBUG
+                    options.RequireHttpsMetadata = false;
+                #endif
             });
 
         services.AddAuthorization(options =>
             options.AddPolicy("CreateOffice", policy =>
             {
                 policy.RequireAuthenticatedUser();
-                policy.RequireClaim("scope", "createOffice");
+                policy.RequireClaim("scope", Config.CreateOfficeScope);
             })
         );
 
