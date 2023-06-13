@@ -26,7 +26,7 @@ public class LockDoorCommandHandler : IRequestHandler<LockDoorCommand>
 
     public async Task Handle(LockDoorCommand command, CancellationToken cancellationToken)
     {
-        var office = await _repository.GetByIdAsync(command.Payload.OfficeId);
+        var office = await _repository.GetByIdAsync(command.Payload.OfficeId) ?? throw new NotFoundException(nameof(Office), command.Payload.OfficeId);;
 
         var door = office.Doors.First(x => x.DoorId == command.Payload.DoorId);
 
@@ -35,10 +35,7 @@ public class LockDoorCommandHandler : IRequestHandler<LockDoorCommand>
             throw new ForbiddenAccessException();
         }
 
-        if (office is not null)
-        {
-            office.LockDoor(command);
-            await _repository.SaveAsync(office);
-        }
+        office.LockDoor(command);
+        await _repository.SaveAsync(office);
     }
 }

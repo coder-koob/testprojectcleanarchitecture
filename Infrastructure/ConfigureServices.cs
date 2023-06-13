@@ -37,8 +37,8 @@ public static class ConfigureServices
         var redisOptions = new RedisDbOptions();
         configuration.GetSection(RedisDbOptions.RedisDbSettings).Bind(redisOptions);
 
-        var configurationOptions = ConfigurationOptions.Parse(redisOptions.ConnectionString);
-        services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(configurationOptions));
+        var redisConfigurationOptions = ConfigurationOptions.Parse(redisOptions.ConnectionString);
+        services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(redisConfigurationOptions));
 
         services.AddTransient<IReadModelService<OfficeReadModel>, RedisReadModelService<OfficeReadModel>>();
         services.AddTransient<IReadModelService<DoorHistoryReadModel>, RedisReadModelService<DoorHistoryReadModel>>();
@@ -52,7 +52,9 @@ public static class ConfigureServices
 
         services.AddTransient<IClientService, ClientService>();
 
-        IdentityModelEventSource.ShowPII = true;
+        #if DEBUG
+            IdentityModelEventSource.ShowPII = true;
+        #endif
 
         services.AddAuthentication("Bearer")
             .AddJwtBearer(options =>

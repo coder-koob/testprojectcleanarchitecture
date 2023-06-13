@@ -1,3 +1,4 @@
+using Domain.Common.Exceptions;
 using Domain.Doors;
 using Domain.Doors.Commands;
 using Domain.Interfaces;
@@ -17,15 +18,11 @@ public class AddDoorCommandHandler : IRequestHandler<AddDoorCommand, Door?>
 
     public async Task<Door?> Handle(AddDoorCommand command, CancellationToken cancellationToken)
     {
-        var office = await _repository.GetByIdAsync(command.Payload.OfficeId);
+        var office = await _repository.GetByIdAsync(command.Payload.OfficeId) ?? throw new NotFoundException(nameof(Office), command.Payload.OfficeId);
 
-        if (office is not null)
-        {
-            var door = office.AddDoor(command);
-            await _repository.SaveAsync(office);
-            return door;
-        }
+        var door = office.AddDoor(command);
+        await _repository.SaveAsync(office);
 
-        return null;
+        return door;
     }
 }

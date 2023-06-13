@@ -19,6 +19,15 @@ public partial class Door : Entity
         Scope = scope;
     }
 
+    public Door(Guid officeId, Guid doorId, string name, bool isLocked, string scope)
+    {
+        OfficeId = officeId;
+        DoorId = doorId;
+        Name = name;
+        IsLocked = isLocked;
+        Scope = scope;
+    }
+
     public Guid OfficeId { get; set; }
     public Guid DoorId { get; set; }
     public string? Name { get; set; }

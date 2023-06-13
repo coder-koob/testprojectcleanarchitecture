@@ -1,3 +1,4 @@
+using Application.Common.Services;
 using Application.Doors.Models;
 using Application.Doors.ReadModels;
 using Domain.Doors.Events;
@@ -10,25 +11,20 @@ public class AddDoorHistoryEventHandler: INotificationHandler<DoorAddedEvent>, I
 {
     private readonly IReadModelService<DoorHistoryReadModel> _doorHistoryReadModelService;
 
-    public AddDoorHistoryEventHandler(IReadModelService<DoorHistoryReadModel> doorHistoryReadModelService)
+    public AddDoorHistoryEventHandler(
+        IReadModelService<DoorHistoryReadModel> doorHistoryReadModelService)
     {
         _doorHistoryReadModelService = doorHistoryReadModelService;
     }
 
-    public async Task Handle(DoorAddedEvent notification, CancellationToken cancellationToken)
-    {
+    public async Task Handle(DoorAddedEvent notification, CancellationToken cancellationToken) =>
         await Handle(notification.OfficeId, notification.DoorId, nameof(DoorAddedEvent), notification.Timestamp);
-    }
 
-    public async Task Handle(DoorLockedEvent notification, CancellationToken cancellationToken)
-    {
+    public async Task Handle(DoorLockedEvent notification, CancellationToken cancellationToken) =>
         await Handle(notification.OfficeId, notification.DoorId, nameof(DoorLockedEvent), notification.Timestamp);
-    }
 
-    public async Task Handle(DoorUnlockedEvent notification, CancellationToken cancellationToken)
-    {
+    public async Task Handle(DoorUnlockedEvent notification, CancellationToken cancellationToken) =>
         await Handle(notification.OfficeId, notification.DoorId, nameof(DoorUnlockedEvent), notification.Timestamp);
-    }
 
     private async Task Handle(Guid officeId, Guid doorId, string eventName, DateTimeOffset timestamp)
     {
@@ -40,7 +36,7 @@ public class AddDoorHistoryEventHandler: INotificationHandler<DoorAddedEvent>, I
         readModel.DoorId = doorId;
         readModel.Timestamp = timestamp;
 
-        readModel.DoorHistory.Add(new DoorEventDto(eventName, timestamp));
+        readModel.DoorHistory.Add(new DoorEventDto(eventName, clientId, timestamp));
 
         await _doorHistoryReadModelService.SaveAsync(readModel, doorId.ToString());
     }

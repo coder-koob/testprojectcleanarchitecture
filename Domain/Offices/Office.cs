@@ -23,6 +23,13 @@ public partial class Office : Entity
         Name = name;
     }
 
+    public Office(Guid officeId, string name, List<Door> doors)
+    {
+        OfficeId = officeId;
+        Name = name;
+        _doors = doors;
+    }
+
     public Guid OfficeId;
     public string? Name;
     public IReadOnlyCollection<Door> Doors => _doors.AsReadOnly();

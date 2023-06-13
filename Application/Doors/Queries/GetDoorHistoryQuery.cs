@@ -29,12 +29,7 @@ public class GetDoorHistoryQueryHandler : IRequestHandler<GetDoorHistoryQuery, D
 
     public async Task<DoorHistoryDto> Handle(GetDoorHistoryQuery request, CancellationToken cancellationToken)
     {
-        var readModel = await _doorHistoryReadModelService.GetByIdAsync(request.DoorId.ToString());
-
-        if (readModel is null)
-        {
-            throw new NotFoundException(nameof(DoorHistoryReadModel), request.DoorId);
-        }
+        var readModel = await _doorHistoryReadModelService.GetByIdAsync(request.DoorId.ToString()) ?? throw new NotFoundException(nameof(DoorHistoryReadModel), request.DoorId);
         
         var response = new DoorHistoryDto(readModel.OfficeId, readModel.DoorId, readModel.DoorHistory, readModel.Timestamp);
 

@@ -25,7 +25,7 @@ public class UnlockDoorCommandHandler : IRequestHandler<UnlockDoorCommand>
 
     public async Task Handle(UnlockDoorCommand command, CancellationToken cancellationToken)
     {
-        var office = await _repository.GetByIdAsync(command.Payload.OfficeId);
+        var office = await _repository.GetByIdAsync(command.Payload.OfficeId) ?? throw new NotFoundException(nameof(Office), command.Payload.OfficeId);;
 
         var door = office.Doors.First(x => x.DoorId == command.Payload.DoorId);
 
@@ -34,10 +34,7 @@ public class UnlockDoorCommandHandler : IRequestHandler<UnlockDoorCommand>
             throw new ForbiddenAccessException();
         }
 
-        if (office is not null)
-        {
-            office.UnlockDoor(command);
-            await _repository.SaveAsync(office);
-        }
+        office.UnlockDoor(command);
+        await _repository.SaveAsync(office);
     }
 }

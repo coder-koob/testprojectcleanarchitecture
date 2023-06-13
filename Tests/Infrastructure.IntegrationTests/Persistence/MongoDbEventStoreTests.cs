@@ -39,7 +39,7 @@ public class MongoDbEventStoreTests
 public class FakeEvent : Event
 {
     public FakeEvent(Guid aggregateId)
-        : base(aggregateId)
+        : base(aggregateId, new Context())
     {
     }
 }
