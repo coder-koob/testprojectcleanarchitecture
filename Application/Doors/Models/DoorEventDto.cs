@@ -7,7 +7,7 @@ namespace Application.Doors.Models;
 
 public class DoorEventDto
 {
-    public DoorEventDto(string @event, string clientId, DateTimeOffset timestamp)
+    public DoorEventDto(string @event, string? clientId, DateTimeOffset timestamp)
     {
         Event = @event;
         ClientId = clientId;

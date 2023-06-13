@@ -10,7 +10,10 @@ public class CreateOfficeCommandHandler : CommandHandler<CreateOfficeCommand, Of
 {
     private readonly IEventSourcedRepository<Office> _officeRepository;
 
-    public CreateOfficeCommandHandler(IEventSourcedRepository<Office> officeRepository)
+    public CreateOfficeCommandHandler(
+        IEventSourcedRepository<Office> officeRepository,
+        ICurrentUserService currentUserService)
+        : base(currentUserService)
     {
         _officeRepository = officeRepository;
     }

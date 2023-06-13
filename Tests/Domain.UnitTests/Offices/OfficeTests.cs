@@ -74,11 +74,7 @@ public class OfficeTests
         var officeId = Guid.NewGuid();
         var doorId = Guid.NewGuid();
 
-        var office = new Office(officeId, "test-office");
-
-        var addDoorCommand = new AddDoorCommand(new AddDoorPayload(officeId, doorId, "test-door", "test"));
-
-        office.AddDoor(addDoorCommand);
+        var office = new Office(officeId, "test-office", new List<Door> { new Door(officeId, doorId, "test", false, "test") });
 
         var lockDoorCommand = new LockDoorCommand(new LockDoorPayload(officeId, doorId));
 
@@ -89,9 +85,9 @@ public class OfficeTests
         Assert.Single(office.Doors);
 
         var changeEvents = office.GetChanges();
-        Assert.Equal(2, changeEvents.Count());
+        Assert.Single(changeEvents);
 
-        var @event = changeEvents.Last();
+        var @event = changeEvents.First();
 
         Assert.IsType<DoorLockedEvent>(@event);
 
@@ -108,11 +104,7 @@ public class OfficeTests
         var officeId = Guid.NewGuid();
         var doorId = Guid.NewGuid();
 
-        var office = new Office(officeId, "test-office");
-
-        var addDoorCommand = new AddDoorCommand(new AddDoorPayload(officeId, doorId, "test-door", "test"));
-
-        office.AddDoor(addDoorCommand);
+        var office = new Office(officeId, "test-office", new List<Door> { new Door(officeId, doorId, "test", true, "test") });
 
         var command = new UnlockDoorCommand(new UnlockDoorPayload(officeId, doorId));
 
@@ -123,9 +115,9 @@ public class OfficeTests
         Assert.Single(office.Doors);
 
         var changeEvents = office.GetChanges();
-        Assert.Equal(2, changeEvents.Count());
+        Assert.Single(changeEvents);
 
-        var @event = changeEvents.Last();
+        var @event = changeEvents.First();
 
         Assert.IsType<DoorUnlockedEvent>(@event);
 

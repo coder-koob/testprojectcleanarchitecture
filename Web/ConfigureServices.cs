@@ -1,4 +1,4 @@
-using Application.Common.Services;
+using Domain.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using NSwag;
 using NSwag.Generation.Processors.Security;

@@ -35,7 +35,9 @@ public class AddDoorCommandTests
         var eventSourceRepoMock = new Mock<IEventSourcedRepository<Office>>();
         eventSourceRepoMock.Setup(x => x.GetByIdAsync(officeId)).ReturnsAsync(office);
 
-        var handler = new AddDoorCommandHandler(eventSourceRepoMock.Object);
+        var currentUserServiceMock = new Mock<ICurrentUserService>();
+
+        var handler = new AddDoorCommandHandler(eventSourceRepoMock.Object, currentUserServiceMock.Object);
 
         // Act
         var result = await handler.Handle(command, new CancellationToken());
@@ -66,7 +68,9 @@ public class AddDoorCommandTests
 
         var eventSourceRepoMock = new Mock<IEventSourcedRepository<Office>>();
 
-        var handler = new AddDoorCommandHandler(eventSourceRepoMock.Object);
+        var currentUserServiceMock = new Mock<ICurrentUserService>();
+
+        var handler = new AddDoorCommandHandler(eventSourceRepoMock.Object, currentUserServiceMock.Object);
 
         // Act
         var act = async () => await handler.Handle(command, new CancellationToken());

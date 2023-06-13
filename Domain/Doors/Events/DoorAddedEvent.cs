@@ -7,7 +7,7 @@ namespace Domain.Doors.Events;
 public class DoorAddedEvent : Event
 {
     public DoorAddedEvent(Guid officeId, AddDoorCommand command)
-        : base(officeId)
+        : base(officeId, command.Context)
     {
         DoorId = command.Payload.DoorId;
         Name = command.Payload.Name;

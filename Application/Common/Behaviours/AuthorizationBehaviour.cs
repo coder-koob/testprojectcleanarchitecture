@@ -2,6 +2,7 @@ using System.Reflection;
 using Application.Common.Security;
 using Application.Common.Services;
 using Domain.Common.Exceptions;
+using Domain.Interfaces;
 using MediatR;
 
 namespace Application.Common.Behaviours;

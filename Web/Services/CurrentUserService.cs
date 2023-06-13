@@ -1,5 +1,5 @@
 using System.Security.Claims;
-using Application.Common.Services;
+using Domain.Interfaces;
 
 namespace Web.Services;
 

@@ -6,7 +6,7 @@ namespace Domain.Doors.Events;
 public class DoorLockedEvent : Event
 {
     public DoorLockedEvent(Guid officeId, LockDoorCommand command)
-        : base(officeId)
+        : base(officeId, command.Context)
     {
         OfficeId = officeId;
         DoorId = command.Payload.DoorId;

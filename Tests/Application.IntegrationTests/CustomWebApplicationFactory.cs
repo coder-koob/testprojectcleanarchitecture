@@ -1,4 +1,4 @@
-using Application.Common.Services;
+using Domain.Interfaces;
 using Infrastructure.Persistence;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;

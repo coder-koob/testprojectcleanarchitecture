@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Application.Common.Services;
+using Domain.Interfaces;
 using MediatR.Pipeline;
 using Microsoft.Extensions.Logging;
 

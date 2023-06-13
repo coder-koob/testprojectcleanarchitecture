@@ -18,15 +18,15 @@ public class AddDoorHistoryEventHandler: INotificationHandler<DoorAddedEvent>, I
     }
 
     public async Task Handle(DoorAddedEvent notification, CancellationToken cancellationToken) =>
-        await Handle(notification.OfficeId, notification.DoorId, nameof(DoorAddedEvent), notification.Timestamp);
+        await Handle(notification.OfficeId, notification.DoorId, nameof(DoorAddedEvent), notification.Context?.ClientId, notification.Timestamp);
 
     public async Task Handle(DoorLockedEvent notification, CancellationToken cancellationToken) =>
-        await Handle(notification.OfficeId, notification.DoorId, nameof(DoorLockedEvent), notification.Timestamp);
+        await Handle(notification.OfficeId, notification.DoorId, nameof(DoorLockedEvent), notification.Context?.ClientId, notification.Timestamp);
 
     public async Task Handle(DoorUnlockedEvent notification, CancellationToken cancellationToken) =>
-        await Handle(notification.OfficeId, notification.DoorId, nameof(DoorUnlockedEvent), notification.Timestamp);
+        await Handle(notification.OfficeId, notification.DoorId, nameof(DoorUnlockedEvent), notification.Context?.ClientId, notification.Timestamp);
 
-    private async Task Handle(Guid officeId, Guid doorId, string eventName, DateTimeOffset timestamp)
+    private async Task Handle(Guid officeId, Guid doorId, string eventName, string? clientId, DateTimeOffset timestamp)
     {
         var readModel = await _doorHistoryReadModelService.GetByIdAsync(doorId.ToString());
 

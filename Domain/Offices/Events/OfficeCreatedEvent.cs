@@ -6,7 +6,7 @@ namespace Domain.Offices.Events;
 public class OfficeCreatedEvent : Event
 {
     public OfficeCreatedEvent(Guid officeId, CreateOfficeCommand command)
-        : base(officeId)
+        : base(officeId, command.Context)
     {
         OfficeId = officeId;
         Name = command.Payload.Name;
