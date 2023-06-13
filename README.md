@@ -12,7 +12,7 @@ This project follows the principles of Clean Architecture, using .NET and CQRS p
 
 - **Infrastructure**: This layer contains classes for accessing external resources such as databases, file systems, web services, etc.
 
-The project also uses Claims-Based Authentication managed by IdentityServer.
+The project also uses Claims-Based Authentication managed by IdentityServer. Ideally in a real world scenario this would use an authorization code flow or implicit flow, but for the intent of this demo, M2M type tokens were used.
 
 ## State Management
 
@@ -27,16 +27,31 @@ To run this project locally in a Docker container, follow the steps below:
 1. **Build the Docker image:**
 
     ```sh
-    docker-compose build
+    docker compose build
     ```
 
 2. **Run the Docker container:**
 
     ```sh
-    docker-compose up
+    docker compose up
+    ```
+
+3. **Run the Application:**
+
+    Navigate to the Web directory.
+
+    ```sh
+    cd Web
+    ```
+
+    Start the application.
+    ```sh
+    dotnet run
     ```
 
     This will start the application and all its dependencies (MongoDB and Redis) in their own Docker containers.
+
+    The docker file to build the application has been setup, however there's an issue with the cert on the Identity server that still needs to be sorted out.
 
 ## Note on HTTPS:
 
