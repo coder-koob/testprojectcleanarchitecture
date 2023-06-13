@@ -1,0 +1,229 @@
+{
+	"info": {
+		"_postman_id": "773cebdc-4149-4876-90e2-740c955a6a28",
+		"name": "Office",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "13913597"
+	},
+	"item": [
+		{
+			"name": "CreateOffice",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"pm.environment.set(\"lastCreatedOfficeId\", jsonData.officeId);\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"Name\": \"Office\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/offices",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"offices"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetOffice",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/Offices/{{lastCreatedOfficeId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"Offices",
+						"{{lastCreatedOfficeId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AddDoor",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"pm.environment.set(\"lastAddedDoorId\", jsonData.doorId);\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"Name\": \"main\",\r\n    \"scope\": \"generalAccess\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/offices/{{lastCreatedOfficeId}}/door",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"offices",
+						"{{lastCreatedOfficeId}}",
+						"door"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "LockDoor",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/offices/{{lastCreatedOfficeId}}/door/{{lastAddedDoorId}}/lock",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"offices",
+						"{{lastCreatedOfficeId}}",
+						"door",
+						"{{lastAddedDoorId}}",
+						"lock"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UnlockDoor",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/offices/{{lastCreatedOfficeId}}/door/{{lastAddedDoorId}}/unlock",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"offices",
+						"{{lastCreatedOfficeId}}",
+						"door",
+						"{{lastAddedDoorId}}",
+						"unlock"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetDoorHistory",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/doors/{{lastAddedDoorId}}/history",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"doors",
+						"{{lastAddedDoorId}}",
+						"history"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

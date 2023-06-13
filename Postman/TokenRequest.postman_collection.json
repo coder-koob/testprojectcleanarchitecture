@@ -1,0 +1,190 @@
+{
+	"info": {
+		"_postman_id": "c1b85f75-ecf1-431d-a53e-41f13133217f",
+		"name": "TokenRequest",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "13913597"
+	},
+	"item": [
+		{
+			"name": "Request Director",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"pm.environment.set(\"token\", jsonData.access_token);\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "director",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "directorSecret",
+							"type": "text"
+						},
+						{
+							"key": "scope",
+							"value": "generalAccess secureAccess createOffice addDoor readHistory readOffice lockDoor unlockDoor",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseUrl}}/connect/token",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"connect",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Request Office Manager",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"pm.environment.set(\"token\", jsonData.access_token);\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "officeManager",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "officeManagerSecret",
+							"type": "text"
+						},
+						{
+							"key": "scope",
+							"value": "generalAccess secureAccess addDoor readOffice lockDoor unlockDoor",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseUrl}}/connect/token",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"connect",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Request Employee",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"pm.environment.set(\"token\", jsonData.access_token);\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "employee",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "employeeSecret",
+							"type": "text"
+						},
+						{
+							"key": "scope",
+							"value": "generalAccess lockDoor unlockDoor",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "administrator@localhost",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "password",
+							"value": "Administrator1!",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseUrl}}/connect/token",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"connect",
+						"token"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
